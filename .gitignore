@@ -1,0 +1,8 @@
+# Ignore deployment instructions
+deployment_instructions.txt
+
+# Node modules
+node_modules/
+
+# Environment variables
+.env
