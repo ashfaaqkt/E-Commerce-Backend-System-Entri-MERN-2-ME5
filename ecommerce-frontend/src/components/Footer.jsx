@@ -6,7 +6,7 @@ const Footer = () => {
     const { darkMode } = useSelector((state) => state.theme);
 
     return (
-        <footer className={`py-8 mt-12 transition-all duration-300 ${
+        <footer className={`py-8 mt-12 transition-all duration-300 rounded-t-3xl ${
             darkMode 
                 ? 'bg-gray-900/80 backdrop-blur-md border-t border-white/5 text-gray-400' 
                 : 'bg-blue-900 text-white bg-opacity-95'

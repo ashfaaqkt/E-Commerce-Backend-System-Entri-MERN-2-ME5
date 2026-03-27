@@ -33,7 +33,7 @@ const Navbar = () => {
     };
 
     return (
-        <nav className={`${darkMode ? 'bg-black/90 border-b border-gray-800' : 'bg-blue-800'} text-white shadow-lg sticky top-0 z-50 backdrop-blur-md transition-colors duration-500`}>
+        <nav className={`${darkMode ? 'bg-black/90 border-b border-gray-800' : 'bg-blue-800'} text-white shadow-lg sticky top-0 z-50 backdrop-blur-md transition-colors duration-500 rounded-b-3xl`}>
             <div className="container mx-auto px-6 py-4 flex justify-between items-center">
                 <Link to="/" className="hover:text-blue-200 transition-all duration-300 transform hover:scale-110 active:scale-95" title="Home">
                     <FaShoppingBasket className={`text-4xl ${darkMode ? 'text-blue-400' : 'text-white'}`} />
