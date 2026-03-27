@@ -20,11 +20,11 @@ app.use(express.urlencoded({ extended: true }));
 const { errorHandler } = require('./middleware/errorHandler');
 
 // API Routes
-app.use('/api/auth', require('./routes/authenticationRoutes'));
-app.use('/api/users', require('./routes/userProfileRoutes'));
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
-app.use('/api/analytics', require('./routes/analyticsRoutes'));
+app.use('/api/analytics', require('./routes/adminRoutes'));
 app.use('/api/seed', require('./routes/seedRoutes'));
 
 app.use(errorHandler);

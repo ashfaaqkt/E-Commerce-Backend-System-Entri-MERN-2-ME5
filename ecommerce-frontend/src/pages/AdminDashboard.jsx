@@ -102,11 +102,27 @@ const AdminDashboard = () => {
         } catch (err) { console.error(err); }
     };
 
+    const totalEarnings = orders.reduce((acc, order) => acc + (order.totalPrice || 0), 0);
+    const totalOrdersCount = orders.length;
+
     return (
-        <div className="max-w-5xl mx-auto">
-            <div className={`rounded-3xl shadow-xl p-8 mb-6 border transition-all ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-blue-50'}`}>
-                <h1 className={`text-3xl font-extrabold mb-1 ${darkMode ? 'text-white' : 'text-blue-900'}`}>Admin Dashboard</h1>
-                <p className={`${darkMode ? 'text-blue-400' : 'text-blue-400'} font-medium`}>Welcome, {userInfo?.name}</p>
+        <div className="max-w-5xl mx-auto pb-12">
+            <div className={`rounded-3xl shadow-xl p-8 mb-6 border transition-all flex flex-col md:flex-row justify-between items-center gap-6 ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-blue-50'}`}>
+                <div className="text-center md:text-left">
+                    <h1 className={`text-3xl font-extrabold mb-1 ${darkMode ? 'text-white' : 'text-blue-900'}`}>Admin Dashboard</h1>
+                    <p className={`${darkMode ? 'text-blue-400' : 'text-blue-400'} font-medium`}>Welcome, {userInfo?.name}</p>
+                </div>
+                
+                <div className="flex gap-4 w-full md:w-auto">
+                    <div className={`flex-1 md:w-40 p-4 rounded-2xl border text-center transition-all ${darkMode ? 'bg-gray-900/40 border-gray-700' : 'bg-blue-50 border-blue-100'}`}>
+                        <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${darkMode ? 'text-gray-500' : 'text-blue-400'}`}>Total Earnings</p>
+                        <p className={`text-xl font-black ${darkMode ? 'text-blue-400' : 'text-blue-700'}`}>₹{totalEarnings.toLocaleString('en-IN')}</p>
+                    </div>
+                    <div className={`flex-1 md:w-40 p-4 rounded-2xl border text-center transition-all ${darkMode ? 'bg-gray-900/40 border-gray-700' : 'bg-blue-50 border-blue-100'}`}>
+                        <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${darkMode ? 'text-gray-500' : 'text-blue-400'}`}>Total Orders</p>
+                        <p className={`text-xl font-black ${darkMode ? 'text-blue-400' : 'text-blue-700'}`}>{totalOrdersCount}</p>
+                    </div>
+                </div>
             </div>
 
             {/* Tabs */}
