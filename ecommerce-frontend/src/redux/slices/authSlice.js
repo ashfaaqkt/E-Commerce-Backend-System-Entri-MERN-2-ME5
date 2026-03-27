@@ -1,0 +1,53 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axiosInstance from '../../api/axiosInstance';
+
+export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
+    try {
+        const response = await axiosInstance.post('/auth/login', credentials);
+        localStorage.setItem('userInfo', JSON.stringify(response.data));
+        return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response.data.error || error.message);
+    }
+});
+
+export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
+    await axiosInstance.get('/auth/logout');
+    localStorage.removeItem('userInfo');
+});
+
+const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
+
+const initialState = {
+    userInfo: userInfoFromStorage ? userInfoFromStorage.user : null,
+    token: userInfoFromStorage ? userInfoFromStorage.token : null,
+    loading: false,
+    error: null,
+};
+
+const authSlice = createSlice({
+    name: 'auth',
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(login.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(login.fulfilled, (state, action) => {
+            state.loading = false;
+            state.userInfo = action.payload.user;
+            state.token = action.payload.token;
+        })
+        .addCase(login.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+        .addCase(logout.fulfilled, (state) => {
+            state.userInfo = null;
+            state.token = null;
+        });
+    },
+});
+
+export default authSlice.reducer;
