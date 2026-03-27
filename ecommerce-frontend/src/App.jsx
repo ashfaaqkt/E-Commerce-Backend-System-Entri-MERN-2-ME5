@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { useState, useEffect, Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -13,6 +13,7 @@ import PlaceOrder from './pages/PlaceOrder';
 import OrderConfirmation from './pages/OrderConfirmation';
 import Orders from './pages/Orders';
 import AdminDashboard from './pages/AdminDashboard';
+import ScrollToTop from './components/ScrollToTop';
 
 // Placeholder Pages
 const Contact = () => <div className="p-8 text-center text-2xl font-bold min-h-screen">Contact Page</div>;
@@ -33,6 +34,17 @@ const AdminRoute = ({ children }) => {
 
 function App() {
     const { darkMode } = useSelector((state) => state.theme);
+    
+    // Apply theme to document root for scrollbar and system theme awareness
+    useEffect(() => {
+        if (darkMode) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.style.colorScheme = 'dark';
+        } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.style.colorScheme = 'light';
+        }
+    }, [darkMode]);
 
     return (
         <div className={`${darkMode ? 'dark' : ''} flex flex-col min-h-screen bg-gradient-to-b ${darkMode ? 'from-black to-gray-900 border-gray-800' : 'from-blue-900 to-white border-blue-100'} text-gray-800 transition-colors duration-500`}>
@@ -53,6 +65,7 @@ function App() {
                 </Routes>
             </main>
             <Footer />
+            <ScrollToTop />
         </div>
     );
 }
