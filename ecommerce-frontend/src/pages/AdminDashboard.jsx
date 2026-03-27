@@ -38,7 +38,7 @@ const AdminDashboard = () => {
 
     const fetchProducts = async () => {
         try {
-            const res = await axiosInstance.get('/products');
+            const res = await axiosInstance.get('/products/admin');
             setProducts(res.data.data || []);
         } catch (e) { console.error(e); }
     };

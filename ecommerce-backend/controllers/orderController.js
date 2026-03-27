@@ -64,7 +64,15 @@ exports.getMyOrders = async (req, res, next) => {
 // @access  Private/Admin
 exports.getAllOrders = async (req, res, next) => {
     try {
-        const orders = await Order.find({}).populate('user', 'name email');
+        // Find products owned by this admin
+        const myProducts = await Product.find({ user: req.user.id }).select('_id');
+        const myProductIds = myProducts.map(p => p._id.toString());
+
+        // Find orders that contain at least one of my products
+        const orders = await Order.find({
+            'orderItems.product': { $in: myProductIds }
+        }).populate('user', 'name email').populate('orderItems.product', 'user');
+
         res.status(200).json({ success: true, data: orders });
     } catch (err) {
         next(err);
@@ -75,10 +83,19 @@ exports.getAllOrders = async (req, res, next) => {
 // @access  Private/Admin
 exports.updateOrderStatus = async (req, res, next) => {
     try {
-        const order = await Order.findById(req.params.id);
+        const order = await Order.findById(req.params.id).populate('orderItems.product', 'user');
 
         if (!order) {
             return res.status(404).json({ success: false, error: 'Order not found' });
+        }
+
+        // Verify if admin owns at least one product in this order
+        const isOwner = order.orderItems.some(item => 
+            item.product && item.product.user && item.product.user.toString() === req.user.id
+        );
+
+        if (!isOwner) {
+            return res.status(401).json({ success: false, error: 'Not authorized to update this order' });
         }
 
         order.status = req.body.status;

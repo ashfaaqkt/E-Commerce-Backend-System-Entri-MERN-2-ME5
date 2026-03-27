@@ -19,6 +19,16 @@ exports.getProducts = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
+// @desc    Get all products for logged-in admin
+// @route   GET /api/products/admin
+// @access  Private/Admin
+exports.getAdminProducts = async (req, res, next) => {
+    try {
+        const products = await Product.find({ user: req.user.id });
+        res.status(200).json({ success: true, count: products.length, data: products });
+    } catch (err) { next(err); }
+};
+
 // @desc    Get single product
 // @route   GET /api/products/:id
 // @access  Public
@@ -48,6 +58,12 @@ exports.updateProduct = async (req, res, next) => {
     try {
         let product = await Product.findById(req.params.id);
         if (!product) return res.status(404).json({ success: false, error: 'Product not found' });
+        
+        // Make sure user is product owner
+        if (product.user.toString() !== req.user.id) {
+            return res.status(401).json({ success: false, error: 'Not authorized to update this product' });
+        }
+
         product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         res.status(200).json({ success: true, data: product });
     } catch (err) { next(err); }
@@ -60,6 +76,12 @@ exports.deleteProduct = async (req, res, next) => {
     try {
         const product = await Product.findById(req.params.id);
         if (!product) return res.status(404).json({ success: false, error: 'Product not found' });
+        
+        // Make sure user is product owner
+        if (product.user.toString() !== req.user.id) {
+            return res.status(401).json({ success: false, error: 'Not authorized to delete this product' });
+        }
+
         await product.deleteOne();
         res.status(200).json({ success: true, data: {} });
     } catch (err) { next(err); }
