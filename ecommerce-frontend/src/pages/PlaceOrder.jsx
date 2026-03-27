@@ -10,6 +10,7 @@ const PlaceOrder = () => {
     const dispatch = useDispatch();
     const cart = useSelector((state) => state.cart);
     const { userInfo } = useSelector((state) => state.auth);
+    const { darkMode } = useSelector((state) => state.theme);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -55,52 +56,52 @@ const PlaceOrder = () => {
 
     return (
         <div className="max-w-6xl mx-auto py-8 px-4">
-            <h1 className="text-4xl font-extrabold text-blue-900 mb-8">Order Summary</h1>
+            <h1 className={`text-4xl font-extrabold mb-8 ${darkMode ? 'text-white' : 'text-blue-900'}`}>Order Summary</h1>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-6">
                     {/* Shipping info */}
-                    <div className="bg-white rounded-3xl shadow-md p-6 border border-blue-50">
+                    <div className={`rounded-3xl shadow-md p-6 border transition-colors ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-blue-50'}`}>
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                                <FaTruck className="text-blue-500" /> Shipping Address
+                            <h2 className={`text-xl font-bold flex items-center gap-2 ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>
+                                <FaTruck className={darkMode ? 'text-blue-400' : 'text-blue-500'} /> Shipping Address
                             </h2>
-                            <Link to="/shipping" className="text-blue-600 text-sm font-bold hover:underline">Edit</Link>
+                            <Link to="/shipping" className={`text-sm font-bold hover:underline ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>Edit</Link>
                         </div>
-                        <p className="text-gray-600">
-                            <strong>Address: </strong>
+                        <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
+                            <strong className={darkMode ? 'text-gray-300' : 'text-gray-900'}>Address: </strong>
                             {shippingAddress.address}, {shippingAddress.city}, {shippingAddress.postalCode}, {shippingAddress.country}
                         </p>
-                        <p className="text-gray-600 mt-2">
-                            <strong>Phone: </strong>
+                        <p className={`mt-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                            <strong className={darkMode ? 'text-gray-300' : 'text-gray-900'}>Phone: </strong>
                             {shippingAddress.phone}
                         </p>
                     </div>
 
                     {/* Payment info */}
-                    <div className="bg-white rounded-3xl shadow-md p-6 border border-blue-50">
-                        <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                            <FaMoneyBillWave className="text-blue-500" /> Payment Method
+                    <div className={`rounded-3xl shadow-md p-6 border transition-colors ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-blue-50'}`}>
+                        <h2 className={`text-xl font-bold mb-4 flex items-center gap-2 ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>
+                            <FaMoneyBillWave className={darkMode ? 'text-blue-400' : 'text-blue-500'} /> Payment Method
                         </h2>
-                        <p className="text-gray-600">
-                            <strong>Method: </strong> Cash on Delivery (COD)
+                        <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
+                            <strong className={darkMode ? 'text-gray-300' : 'text-gray-900'}>Method: </strong> Cash on Delivery (COD)
                         </p>
                     </div>
 
                     {/* Items info */}
-                    <div className="bg-white rounded-3xl shadow-md p-6 border border-blue-50">
-                        <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                            <FaBoxOpen className="text-blue-500" /> Order Items
+                    <div className={`rounded-3xl shadow-md p-6 border transition-colors ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-blue-50'}`}>
+                        <h2 className={`text-xl font-bold mb-4 flex items-center gap-2 ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>
+                            <FaBoxOpen className={darkMode ? 'text-blue-400' : 'text-blue-500'} /> Order Items
                         </h2>
-                        <div className="divide-y divide-gray-100">
+                        <div className={`divide-y ${darkMode ? 'divide-gray-700' : 'divide-gray-100'}`}>
                             {cart.cartItems.map((item, index) => (
                                 <div key={index} className="py-4 flex items-center gap-4">
-                                    <div className="w-16 h-16 bg-blue-50 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+                                    <div className={`w-16 h-16 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 ${darkMode ? 'bg-gray-700 border border-gray-600' : 'bg-blue-50'}`}>
                                         <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
                                     </div>
                                     <div className="flex-grow">
-                                        <h4 className="font-semibold text-gray-800">{item.name}</h4>
-                                        <p className="text-sm text-gray-500">{item.qty} x ₹{item.price.toLocaleString('en-IN')} = ₹{(item.qty * item.price).toLocaleString('en-IN')}</p>
+                                        <h4 className={`font-semibold ${darkMode ? 'text-gray-100' : 'text-gray-800'}`}>{item.name}</h4>
+                                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{item.qty} x ₹{item.price.toLocaleString('en-IN')} = <span className="font-bold text-blue-400">₹{(item.qty * item.price).toLocaleString('en-IN')}</span></p>
                                     </div>
                                 </div>
                             ))}
@@ -110,22 +111,22 @@ const PlaceOrder = () => {
 
                 {/* Totals info */}
                 <div className="lg:col-span-1">
-                    <div className="bg-white rounded-3xl shadow-xl p-8 border border-blue-50 sticky top-24">
-                        <h2 className="text-xl font-bold text-gray-800 mb-6 pb-4 border-b border-gray-100">Price Details</h2>
+                    <div className={`rounded-3xl shadow-xl p-8 border sticky top-24 transition-colors ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-blue-50'}`}>
+                        <h2 className={`text-xl font-bold mb-6 pb-4 border-b ${darkMode ? 'text-gray-100 border-gray-700' : 'text-gray-800 border-gray-100'}`}>Price Details</h2>
                         <div className="space-y-4 mb-8">
-                            <div className="flex justify-between text-gray-600 font-medium">
+                            <div className={`flex justify-between font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                                 <span>Subtotal</span>
-                                <span>₹{itemsPrice.toLocaleString('en-IN')}</span>
+                                <span className={darkMode ? 'text-gray-200' : 'text-gray-800'}>₹{itemsPrice.toLocaleString('en-IN')}</span>
                             </div>
-                            <div className="flex justify-between text-gray-600 font-medium">
+                            <div className={`flex justify-between font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                                 <span>Shipping Fees</span>
-                                <span>{shippingPrice === 0 ? <span className="text-green-600 font-bold">FREE</span> : `₹${shippingPrice.toLocaleString('en-IN')}`}</span>
+                                <span>{shippingPrice === 0 ? <span className="text-green-500 font-bold text-sm tracking-widest">FREE</span> : `₹${shippingPrice.toLocaleString('en-IN')}`}</span>
                             </div>
-                            <div className="flex justify-between text-gray-600 font-medium">
+                            <div className={`flex justify-between font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                                 <span>Tax (15% GST)</span>
-                                <span>₹{taxPrice.toLocaleString('en-IN')}</span>
+                                <span className={darkMode ? 'text-gray-200' : 'text-gray-800'}>₹{taxPrice.toLocaleString('en-IN')}</span>
                             </div>
-                            <div className="flex justify-between text-2xl font-extrabold text-blue-900 pt-4 border-t border-gray-100">
+                            <div className={`flex justify-between text-2xl font-extrabold pt-4 border-t ${darkMode ? 'text-blue-400 border-gray-700' : 'text-blue-900 border-gray-100'}`}>
                                 <span>Total Price</span>
                                 <span>₹{totalPrice.toLocaleString('en-IN')}</span>
                             </div>

@@ -7,6 +7,7 @@ import { updateProfile } from '../redux/slices/authSlice';
 
 const Profile = () => {
     const { userInfo } = useSelector((state) => state.auth);
+    const { darkMode } = useSelector((state) => state.theme);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -62,8 +63,8 @@ const Profile = () => {
 
     return (
         <div className="max-w-2xl mx-auto">
-            <div className="bg-white rounded-3xl shadow-xl p-8 border border-blue-50">
-                <h1 className="text-3xl font-extrabold text-blue-900 mb-8">My Profile</h1>
+            <div className={`rounded-3xl shadow-xl p-8 border transition-colors ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-blue-50'}`}>
+                <h1 className={`text-3xl font-extrabold mb-8 ${darkMode ? 'text-white' : 'text-blue-900'}`}>My Profile</h1>
 
                 {success && <div className="mb-5 bg-green-50 p-4 rounded-xl border border-green-200 text-green-700 text-sm font-semibold">{success}</div>}
                 {error && <div className="mb-5 bg-red-50 p-4 rounded-xl border border-red-200 text-red-600 text-sm font-semibold">{error}</div>}
@@ -71,11 +72,11 @@ const Profile = () => {
                 {/* Avatar */}
                 <div className="flex flex-col items-center mb-8">
                     <div className="relative">
-                        <div className="w-28 h-28 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden border-4 border-blue-300 shadow-lg">
+                        <div className={`w-28 h-28 rounded-full flex items-center justify-center overflow-hidden border-4 shadow-lg ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-blue-100 border-blue-300'}`}>
                             {avatar ? (
                                 <img src={avatar} alt="Profile" className="w-full h-full object-cover" />
                             ) : (
-                                <FaUser className="text-blue-400 text-5xl" />
+                                <FaUser className={darkMode ? 'text-gray-500 text-5xl' : 'text-blue-400 text-5xl'} />
                             )}
                         </div>
                         <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700 transition shadow-lg">
@@ -83,50 +84,50 @@ const Profile = () => {
                             <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
                         </label>
                     </div>
-                    <p className="mt-3 text-sm text-gray-500">Click the camera icon to change your photo</p>
+                    <p className={`mt-3 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Click the camera icon to change your photo</p>
                 </div>
 
                 <form onSubmit={submitHandler} className="space-y-5">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
-                            <label className="text-sm font-bold text-gray-700 mb-1 block">Full Name</label>
+                            <label className={`text-sm font-bold mb-1 block ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Full Name</label>
                             <input type="text" value={name} onChange={(e) => setName(e.target.value)}
-                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" />
+                                className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800'}`} />
                         </div>
                         <div>
-                            <label className="text-sm font-bold text-gray-700 mb-1 block">Email Address</label>
+                            <label className={`text-sm font-bold mb-1 block ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Email Address</label>
                             <input type="email" value={email} disabled
-                                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed" />
+                                className={`w-full px-4 py-3 rounded-xl border cursor-not-allowed ${darkMode ? 'bg-gray-900 border-gray-700 text-gray-500' : 'bg-gray-50 border-gray-200 text-gray-400'}`} />
                         </div>
                         <div>
-                            <label className="text-sm font-bold text-gray-700 mb-1 block">Phone Number</label>
+                            <label className={`text-sm font-bold mb-1 block ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Phone Number</label>
                             <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 XXXXX XXXXX"
-                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" />
+                                className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800'}`} />
                         </div>
                         <div>
-                            <label className="text-sm font-bold text-gray-700 mb-1 block">Street</label>
+                            <label className={`text-sm font-bold mb-1 block ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Street</label>
                             <input type="text" value={address.street} onChange={(e) => setAddress({...address, street: e.target.value})} placeholder="Street / Apartment"
-                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" />
+                                className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800'}`} />
                         </div>
                         <div>
-                            <label className="text-sm font-bold text-gray-700 mb-1 block">City</label>
+                            <label className={`text-sm font-bold mb-1 block ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>City</label>
                             <input type="text" value={address.city} onChange={(e) => setAddress({...address, city: e.target.value})} placeholder="City"
-                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" />
+                                className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800'}`} />
                         </div>
                         <div>
-                            <label className="text-sm font-bold text-gray-700 mb-1 block">State</label>
+                            <label className={`text-sm font-bold mb-1 block ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>State</label>
                             <input type="text" value={address.state} onChange={(e) => setAddress({...address, state: e.target.value})} placeholder="State"
-                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" />
+                                className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800'}`} />
                         </div>
                         <div>
-                            <label className="text-sm font-bold text-gray-700 mb-1 block">Country</label>
+                            <label className={`text-sm font-bold mb-1 block ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Country</label>
                             <input type="text" value={address.country} onChange={(e) => setAddress({...address, country: e.target.value})} placeholder="Country"
-                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" />
+                                className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800'}`} />
                         </div>
                         <div>
-                            <label className="text-sm font-bold text-gray-700 mb-1 block">PIN Code</label>
+                            <label className={`text-sm font-bold mb-1 block ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>PIN Code</label>
                             <input type="text" value={address.zip} onChange={(e) => setAddress({...address, zip: e.target.value})} placeholder="ZIP / PIN Code"
-                                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" />
+                                className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800'}`} />
                         </div>
                     </div>
                     <button type="submit" disabled={loading}

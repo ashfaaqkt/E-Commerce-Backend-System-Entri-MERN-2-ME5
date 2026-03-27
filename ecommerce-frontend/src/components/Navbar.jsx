@@ -1,14 +1,16 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { FaShoppingCart, FaUser, FaChevronDown } from 'react-icons/fa';
+import { FaShoppingCart, FaUser, FaChevronDown, FaSun, FaMoon, FaShoppingBasket } from 'react-icons/fa';
 import { logout } from '../redux/slices/authSlice';
+import { toggleTheme } from '../redux/slices/themeSlice';
 
 const Navbar = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { userInfo } = useSelector((state) => state.auth);
     const { cartItems } = useSelector((state) => state.cart);
+    const { darkMode } = useSelector((state) => state.theme);
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -31,22 +33,33 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="bg-blue-800 text-white shadow-lg sticky top-0 z-50">
+        <nav className={`${darkMode ? 'bg-black/90 border-b border-gray-800' : 'bg-blue-800'} text-white shadow-lg sticky top-0 z-50 backdrop-blur-md transition-colors duration-500`}>
             <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-                <Link to="/" className="text-2xl font-bold tracking-wider hover:text-blue-200 transition">
-                    ME5 E-Commerce
+                <Link to="/" className="hover:text-blue-200 transition-all duration-300 transform hover:scale-110 active:scale-95" title="Home">
+                    <FaShoppingBasket className={`text-4xl ${darkMode ? 'text-blue-400' : 'text-white'}`} />
                 </Link>
-                <div className="flex items-center space-x-6">
-                    <Link to="/cart" className="flex items-center hover:text-blue-300 transition">
+                <div className="flex items-center space-x-4 sm:space-x-6">
+                    {/* Theme Toggle */}
+                    <button
+                        onClick={() => dispatch(toggleTheme())}
+                        className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-300 transform hover:scale-110 active:rotate-12"
+                        title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                    >
+                        {darkMode ? (
+                            <FaSun className="text-yellow-400 text-xl animate-spin-slow" />
+                        ) : (
+                            <FaMoon className="text-blue-200 text-xl" />
+                        )}
+                    </button>
+
+                    <Link to="/cart" className="flex items-center hover:text-blue-300 transition group">
                         <FaShoppingCart className="mr-2 text-xl" />
-                        <span className="font-semibold">
-                            Cart
-                            {cartItems.length > 0 && (
-                                <span className="ml-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                                    {cartItems.reduce((acc, item) => acc + item.qty, 0)}
-                                </span>
-                            )}
-                        </span>
+                        <span className="font-semibold hidden sm:inline">Cart </span>
+                        {cartItems.length > 0 && (
+                            <span className="ml-1 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full shadow-lg group-hover:scale-110 transition-transform">
+                                {cartItems.reduce((acc, item) => acc + item.qty, 0)}
+                            </span>
+                        )}
                     </Link>
                     {userInfo ? (
                         <div className="relative" ref={dropdownRef}>
@@ -55,16 +68,16 @@ const Navbar = () => {
                                 onClick={() => setDropdownOpen(!dropdownOpen)}
                             >
                                 <FaUser className="text-xl" />
-                                <span className="font-semibold">{userInfo.name}</span>
-                                <FaChevronDown className={`text-xs transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} />
+                                <span className="font-semibold hidden sm:inline">{userInfo.name}</span>
+                                <FaChevronDown className={`text-xs transition-transform duration-200 hidden sm:inline ${dropdownOpen ? 'rotate-180' : ''}`} />
                             </button>
                             {dropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-xl shadow-2xl overflow-hidden z-50">
+                                <div className={`absolute right-0 mt-2 w-48 rounded-xl shadow-2xl overflow-hidden z-50 ${darkMode ? 'bg-gray-800 text-white border border-gray-700' : 'bg-white text-gray-800'}`}>
                                     {userInfo.role === 'admin' && (
                                         <Link
                                             to="/admin"
                                             onClick={() => setDropdownOpen(false)}
-                                            className="block px-4 py-3 hover:bg-blue-50 font-medium transition-colors text-blue-700"
+                                            className={`block px-4 py-3 font-medium transition-colors ${darkMode ? 'hover:bg-gray-700 text-blue-400' : 'hover:bg-blue-50 text-blue-700'}`}
                                         >
                                             🛠 Admin Dashboard
                                         </Link>
@@ -72,21 +85,21 @@ const Navbar = () => {
                                     <Link
                                         to="/profile"
                                         onClick={() => setDropdownOpen(false)}
-                                        className="block px-4 py-3 hover:bg-blue-50 font-medium transition-colors"
+                                        className={`block px-4 py-3 font-medium transition-colors ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-blue-50'}`}
                                     >
                                         My Profile
                                     </Link>
                                     <Link
                                         to="/orders"
                                         onClick={() => setDropdownOpen(false)}
-                                        className="block px-4 py-3 hover:bg-blue-50 font-medium transition-colors"
+                                        className={`block px-4 py-3 font-medium transition-colors ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-blue-50'}`}
                                     >
                                         My Orders
                                     </Link>
-                                    <hr className="border-gray-100" />
+                                    <hr className={darkMode ? 'border-gray-700' : 'border-gray-100'} />
                                     <button
                                         onClick={logoutHandler}
-                                        className="block w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 font-medium transition-colors"
+                                        className={`block w-full text-left px-4 py-3 text-red-600 font-medium transition-colors ${darkMode ? 'hover:bg-red-900/20' : 'hover:bg-red-50'}`}
                                     >
                                         Logout
                                     </button>
@@ -96,7 +109,7 @@ const Navbar = () => {
                     ) : (
                         <Link to="/login" className="flex items-center hover:text-blue-300 transition">
                             <FaUser className="mr-2 text-xl" />
-                            <span className="font-semibold">Log In</span>
+                            <span className="font-semibold hidden sm:inline">Log In</span>
                         </Link>
                     )}
                 </div>

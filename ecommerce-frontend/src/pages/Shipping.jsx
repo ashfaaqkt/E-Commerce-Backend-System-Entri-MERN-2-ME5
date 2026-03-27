@@ -8,6 +8,7 @@ const Shipping = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { userInfo } = useSelector((state) => state.auth);
+    const { darkMode } = useSelector((state) => state.theme);
     
     // Pre-fill from profile first, then local storage
     const [address, setAddress] = useState(userInfo?.address?.street || '');
@@ -53,19 +54,23 @@ const Shipping = () => {
 
     return (
         <div className="max-w-md mx-auto py-12 px-4">
-            <div className="bg-white rounded-3xl shadow-2xl p-8 border border-blue-50">
+            <div className={`rounded-3xl shadow-2xl p-8 border transition-colors ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-blue-50'}`}>
                 <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600">
+                    <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${darkMode ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-600'}`}>
                         <FaTruck size={28} />
                     </div>
-                    <h1 className="text-3xl font-extrabold text-blue-900 mb-2">Shipping Details</h1>
-                    <p className="text-gray-500">Where should we send your order?</p>
+                    <h1 className={`text-3xl font-extrabold mb-2 ${darkMode ? 'text-white' : 'text-blue-900'}`}>Shipping Details</h1>
+                    <p className={darkMode ? 'text-gray-400' : 'text-gray-500'}>Where should we send your order?</p>
                 </div>
 
                 <div className="mb-6">
                     <button
                         onClick={handleUseProfileAddress}
-                        className="w-full py-2.5 px-4 bg-blue-50 text-blue-700 rounded-xl font-bold border border-blue-200 hover:bg-blue-100 transition flex items-center justify-center gap-2 mb-2"
+                        className={`w-full py-2.5 px-4 rounded-xl font-bold border transition flex items-center justify-center gap-2 mb-2 ${
+                            darkMode 
+                                ? 'bg-blue-900/20 text-blue-400 border-blue-900/30 hover:bg-blue-900/40' 
+                                : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
+                        }`}
                     >
                         🏠 Use same address as Profile
                     </button>
@@ -76,8 +81,8 @@ const Shipping = () => {
 
                 <form onSubmit={submitHandler} className="space-y-5">
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2 flex items-center gap-2">
-                            <FaPhone className="text-blue-500" /> Phone Number
+                        <label className={`block text-sm font-bold mb-2 flex items-center gap-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                            <FaPhone className={darkMode ? 'text-blue-400' : 'text-blue-500'} /> Phone Number
                         </label>
                         <input
                             type="tel"
@@ -85,12 +90,12 @@ const Shipping = () => {
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             required
-                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                            className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800'}`}
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2 flex items-center gap-2">
-                            <FaMapMarkerAlt className="text-blue-500" /> Address / Street
+                        <label className={`block text-sm font-bold mb-2 flex items-center gap-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                            <FaMapMarkerAlt className={darkMode ? 'text-blue-400' : 'text-blue-500'} /> Address / Street
                         </label>
                         <input
                             type="text"
@@ -98,13 +103,13 @@ const Shipping = () => {
                             value={address}
                             required
                             onChange={(e) => setAddress(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                            className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800'}`}
                         />
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2 flex items-center gap-2">
-                            <FaCity className="text-blue-500" /> City
+                        <label className={`block text-sm font-bold mb-2 flex items-center gap-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                            <FaCity className={darkMode ? 'text-blue-400' : 'text-blue-500'} /> City
                         </label>
                         <input
                             type="text"
@@ -112,13 +117,13 @@ const Shipping = () => {
                             value={city}
                             required
                             onChange={(e) => setCity(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                            className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800'}`}
                         />
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2 flex items-center gap-2">
-                            <FaMailBulk className="text-blue-500" /> Postal Code
+                        <label className={`block text-sm font-bold mb-2 flex items-center gap-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                            <FaMailBulk className={darkMode ? 'text-blue-400' : 'text-blue-500'} /> Postal Code
                         </label>
                         <input
                             type="text"
@@ -126,13 +131,13 @@ const Shipping = () => {
                             value={postalCode}
                             required
                             onChange={(e) => setPostalCode(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                            className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800'}`}
                         />
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2 flex items-center gap-2">
-                            <FaGlobe className="text-blue-500" /> Country
+                        <label className={`block text-sm font-bold mb-2 flex items-center gap-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                            <FaGlobe className={darkMode ? 'text-blue-400' : 'text-blue-500'} /> Country
                         </label>
                         <input
                             type="text"
@@ -140,7 +145,7 @@ const Shipping = () => {
                             value={country}
                             required
                             onChange={(e) => setCountry(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                            className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800'}`}
                         />
                     </div>
 

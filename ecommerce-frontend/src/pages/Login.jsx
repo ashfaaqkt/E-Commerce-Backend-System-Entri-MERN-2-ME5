@@ -14,6 +14,7 @@ const Login = () => {
     const location = useLocation();
 
     const { userInfo, loading, error } = useSelector((state) => state.auth);
+    const { darkMode } = useSelector((state) => state.theme);
 
     const redirect = location.search ? location.search.split('=')[1] : '/';
 
@@ -30,39 +31,39 @@ const Login = () => {
 
     return (
         <div className="flex justify-center items-center min-h-[70vh]">
-            <div className="w-full max-w-md bg-white p-10 rounded-3xl shadow-2xl border border-blue-50 transform transition-all hover:scale-[1.01]">
+            <div className={`w-full max-w-md p-10 rounded-3xl shadow-2xl border transform transition-all hover:scale-[1.01] ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-blue-50'}`}>
                 <div className="text-center mb-10">
-                    <h2 className="text-4xl font-extrabold text-blue-900 mb-2">Welcome Back</h2>
-                    <p className="text-blue-500 font-medium">Sign in to access your account</p>
+                    <h2 className={`text-4xl font-extrabold mb-2 ${darkMode ? 'text-white' : 'text-blue-900'}`}>Welcome Back</h2>
+                    <p className={`${darkMode ? 'text-blue-400' : 'text-blue-500'} font-medium`}>Sign in to access your account</p>
                 </div>
 
                 {error && (
-                    <div className="mb-6 bg-red-50 p-4 rounded-xl border border-red-200 text-red-600 text-center text-sm font-semibold">
+                    <div className={`mb-6 p-4 rounded-xl border text-center text-sm font-semibold ${darkMode ? 'bg-red-900/20 border-red-900/30 text-red-400' : 'bg-red-50 border-red-200 text-red-600'}`}>
                         {error}
                     </div>
                 )}
 
                 <form onSubmit={submitHandler} className="space-y-6">
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
+                        <label className={`block text-sm font-bold mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Email Address</label>
                         <input
                             type="email"
                             placeholder="Enter your email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                            className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800'}`}
                         />
                     </div>
                     <div className="relative">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                        <label className={`block text-sm font-bold mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Password</label>
                         <input
                             type={showPassword ? 'text' : 'password'}
                             placeholder="Enter your password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                            className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800'}`}
                         />
                         <button
                             type="button"
@@ -91,9 +92,9 @@ const Login = () => {
                 </form>
 
                 <div className="mt-8 text-center">
-                    <p className="text-gray-600 text-sm">
+                    <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                         New Customer?{' '}
-                        <Link to="/register" className="text-blue-600 font-bold hover:text-blue-800 transition-colors">
+                        <Link to="/register" className={`font-bold hover:underline transition-colors ${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'}`}>
                             Register
                         </Link>
                     </p>

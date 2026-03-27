@@ -32,8 +32,10 @@ const AdminRoute = ({ children }) => {
 };
 
 function App() {
+    const { darkMode } = useSelector((state) => state.theme);
+
     return (
-        <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-900 to-white text-gray-800 font-sans">
+        <div className={`${darkMode ? 'dark' : ''} flex flex-col min-h-screen bg-gradient-to-b ${darkMode ? 'from-black to-gray-900 border-gray-800' : 'from-blue-900 to-white border-blue-100'} text-gray-800 transition-colors duration-500`}>
             <Navbar />
             <main className="flex-grow container mx-auto px-4 py-8">
                 <Routes>
