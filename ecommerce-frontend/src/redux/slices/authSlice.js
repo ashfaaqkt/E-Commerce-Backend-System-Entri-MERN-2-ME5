@@ -7,7 +7,17 @@ export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI
         localStorage.setItem('userInfo', JSON.stringify(response.data));
         return response.data;
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.response.data.error || error.message);
+        return thunkAPI.rejectWithValue(error.response?.data?.error || error.message);
+    }
+});
+
+export const register = createAsyncThunk('auth/register', async (userData, thunkAPI) => {
+    try {
+        const response = await axiosInstance.post('/auth/register', userData);
+        localStorage.setItem('userInfo', JSON.stringify(response.data));
+        return response.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.error || error.message);
     }
 });
 
@@ -40,6 +50,19 @@ const authSlice = createSlice({
             state.token = action.payload.token;
         })
         .addCase(login.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+        .addCase(register.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(register.fulfilled, (state, action) => {
+            state.loading = false;
+            state.userInfo = action.payload.user;
+            state.token = action.payload.token;
+        })
+        .addCase(register.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;
         })

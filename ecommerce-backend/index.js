@@ -25,10 +25,11 @@ app.use('/api/users', require('./routes/userProfileRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/analytics', require('./routes/analyticsRoutes'));
+app.use('/api/seed', require('./routes/seedRoutes'));
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5002;
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

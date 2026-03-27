@@ -1,0 +1,24 @@
+{
+  "name": "me5-ecommerce-backend-2.0",
+  "version": "1.0.0",
+  "description": "A fully integrated MERN Stack E-Commerce Application, combining a React frontend with a Node.js + Express + MongoDB backend. This project showcases seamless communication between the UI and server, robust data flow, secure authentication, and a cohesive user experience with a beautiful blue to white gradient aesthetic design.",
+  "main": "index.js",
+  "scripts": {
+    "backend": "npm run dev --prefix ecommerce-backend",
+    "frontend": "npm run dev --prefix ecommerce-frontend",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashfaaqkt/E-Commerce-Backend-System-Entri-MERN-2-ME5.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ashfaaqkt/E-Commerce-Backend-System-Entri-MERN-2-ME5/issues"
+  },
+  "homepage": "https://github.com/ashfaaqkt/E-Commerce-Backend-System-Entri-MERN-2-ME5#readme"
+}

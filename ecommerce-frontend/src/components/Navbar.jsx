@@ -1,6 +1,7 @@
+import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { FaShoppingCart, FaUser } from 'react-icons/fa';
+import { FaShoppingCart, FaUser, FaChevronDown } from 'react-icons/fa';
 import { logout } from '../redux/slices/authSlice';
 
 const Navbar = () => {
@@ -9,7 +10,22 @@ const Navbar = () => {
     const { userInfo } = useSelector((state) => state.auth);
     const { cartItems } = useSelector((state) => state.cart);
 
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
     const logoutHandler = () => {
+        setDropdownOpen(false);
         dispatch(logout());
         navigate('/login');
     };
@@ -33,15 +49,49 @@ const Navbar = () => {
                         </span>
                     </Link>
                     {userInfo ? (
-                        <div className="relative group">
-                            <button className="flex items-center hover:text-blue-300 transition focus:outline-none">
-                                <FaUser className="mr-2 text-xl" />
+                        <div className="relative" ref={dropdownRef}>
+                            <button
+                                className="flex items-center gap-2 hover:text-blue-300 transition focus:outline-none"
+                                onClick={() => setDropdownOpen(!dropdownOpen)}
+                            >
+                                <FaUser className="text-xl" />
                                 <span className="font-semibold">{userInfo.name}</span>
+                                <FaChevronDown className={`text-xs transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} />
                             </button>
-                            <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-md shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 invisible group-hover:visible">
-                                <Link to="/profile" className="block px-4 py-2 hover:bg-blue-100">Profile</Link>
-                                <button onClick={logoutHandler} className="block w-full text-left px-4 py-2 hover:bg-blue-100">Logout</button>
-                            </div>
+                            {dropdownOpen && (
+                                <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-xl shadow-2xl overflow-hidden z-50">
+                                    {userInfo.role === 'admin' && (
+                                        <Link
+                                            to="/admin"
+                                            onClick={() => setDropdownOpen(false)}
+                                            className="block px-4 py-3 hover:bg-blue-50 font-medium transition-colors text-blue-700"
+                                        >
+                                            🛠 Admin Dashboard
+                                        </Link>
+                                    )}
+                                    <Link
+                                        to="/profile"
+                                        onClick={() => setDropdownOpen(false)}
+                                        className="block px-4 py-3 hover:bg-blue-50 font-medium transition-colors"
+                                    >
+                                        My Profile
+                                    </Link>
+                                    <Link
+                                        to="/orders"
+                                        onClick={() => setDropdownOpen(false)}
+                                        className="block px-4 py-3 hover:bg-blue-50 font-medium transition-colors"
+                                    >
+                                        My Orders
+                                    </Link>
+                                    <hr className="border-gray-100" />
+                                    <button
+                                        onClick={logoutHandler}
+                                        className="block w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 font-medium transition-colors"
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <Link to="/login" className="flex items-center hover:text-blue-300 transition">
