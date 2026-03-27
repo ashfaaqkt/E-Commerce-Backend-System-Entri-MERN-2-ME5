@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FaCamera, FaUser } from 'react-icons/fa';
 import axiosInstance from '../api/axiosInstance';
+import { updateProfile } from '../redux/slices/authSlice';
 
 const Profile = () => {
     const { userInfo } = useSelector((state) => state.auth);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -45,10 +47,14 @@ const Profile = () => {
         e.preventDefault();
         setLoading(true); setSuccess(''); setError('');
         try {
-            await axiosInstance.put('/users/profile', { name, phone, avatar, address });
-            setSuccess('✅ Profile updated successfully!');
+            const resultAction = await dispatch(updateProfile({ name, phone, avatar, address }));
+            if (updateProfile.fulfilled.match(resultAction)) {
+                setSuccess('✅ Profile updated successfully!');
+            } else {
+                setError(resultAction.payload || 'Update failed');
+            }
         } catch (err) {
-            setError(err.response?.data?.error || 'Update failed');
+            setError('An unexpected error occurred');
         } finally {
             setLoading(false);
         }

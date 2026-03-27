@@ -30,6 +30,23 @@ exports.addOrderItems = async (req, res, next) => {
     }
 };
 
+// @desc    Get order by ID
+// @route   GET /api/orders/:id
+// @access  Private
+exports.getOrderById = async (req, res, next) => {
+    try {
+        const order = await Order.findById(req.params.id).populate('user', 'name email');
+
+        if (!order) {
+            return res.status(404).json({ success: false, error: 'Order not found' });
+        }
+
+        res.status(200).json({ success: true, data: order });
+    } catch (err) {
+        next(err);
+    }
+};
+
 // @desc    Get logged in user orders
 // @route   GET /api/orders/myorders
 // @access  Private
@@ -49,6 +66,59 @@ exports.getAllOrders = async (req, res, next) => {
     try {
         const orders = await Order.find({}).populate('user', 'name email');
         res.status(200).json({ success: true, data: orders });
+    } catch (err) {
+        next(err);
+    }
+};
+// @desc    Update order status
+// @route   PUT /api/orders/:id/status
+// @access  Private/Admin
+exports.updateOrderStatus = async (req, res, next) => {
+    try {
+        const order = await Order.findById(req.params.id);
+
+        if (!order) {
+            return res.status(404).json({ success: false, error: 'Order not found' });
+        }
+
+        order.status = req.body.status;
+
+        if (req.body.status === 'Delivered') {
+            order.isDelivered = true;
+            order.deliveredAt = Date.now();
+        }
+
+        const updatedOrder = await order.save();
+
+        res.status(200).json({ success: true, data: updatedOrder });
+    } catch (err) {
+        next(err);
+    }
+};
+
+// @desc    Cancel order
+// @route   PUT /api/orders/:id/cancel
+// @access  Private
+exports.cancelOrder = async (req, res, next) => {
+    try {
+        const order = await Order.findById(req.params.id);
+
+        if (!order) {
+            return res.status(404).json({ success: false, error: 'Order not found' });
+        }
+
+        if (order.user.toString() !== req.user._id.toString()) {
+            return res.status(401).json({ success: false, error: 'Not authorized' });
+        }
+
+        if (order.status === 'Shipped' || order.status === 'Delivered' || order.status === 'Cancelled' || order.status === 'Failed') {
+            return res.status(400).json({ success: false, error: 'Order cannot be cancelled at this stage' });
+        }
+
+        order.status = 'Cancelled';
+        await order.save();
+
+        res.status(200).json({ success: true, data: order });
     } catch (err) {
         next(err);
     }

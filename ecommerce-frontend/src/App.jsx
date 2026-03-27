@@ -7,11 +7,14 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
+import Cart from './pages/Cart';
+import Shipping from './pages/Shipping';
+import PlaceOrder from './pages/PlaceOrder';
+import OrderConfirmation from './pages/OrderConfirmation';
+import Orders from './pages/Orders';
 import AdminDashboard from './pages/AdminDashboard';
 
 // Placeholder Pages
-const Cart = () => <div className="p-8 text-center text-2xl font-bold min-h-screen">Cart Page</div>;
-const Orders = () => <div className="p-8 text-center text-2xl font-bold min-h-screen">My Orders Page</div>;
 const Contact = () => <div className="p-8 text-center text-2xl font-bold min-h-screen">Contact Page</div>;
 
 // Protected Route: only for logged-in users
@@ -38,6 +41,9 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/cart" element={<Cart />} />
+                    <Route path="/shipping" element={<PrivateRoute><Shipping /></PrivateRoute>} />
+                    <Route path="/placeorder" element={<PrivateRoute><PlaceOrder /></PrivateRoute>} />
+                    <Route path="/order-confirmation/:id" element={<PrivateRoute><OrderConfirmation /></PrivateRoute>} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
                     <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />

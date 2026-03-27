@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '../redux/slices/cartSlice';
-import { FaShoppingCart, FaCheck } from 'react-icons/fa';
+import { addToCart, removeFromCart } from '../redux/slices/cartSlice';
+import { FaShoppingCart, FaCheck, FaTrash } from 'react-icons/fa';
 import { useState } from 'react';
 
 const ProductCard = ({ product }) => {
@@ -23,8 +23,24 @@ const ProductCard = ({ product }) => {
         setTimeout(() => setAdded(false), 2000);
     };
 
+    const handleRemoveFromCart = (e) => {
+        e.stopPropagation();
+        dispatch(removeFromCart(product._id));
+    };
+
     return (
-        <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-blue-50 flex flex-col">
+        <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-blue-50 flex flex-col relative group">
+            {/* Quick Delete Trash Icon if in cart */}
+            {isInCart && (
+                <button 
+                    onClick={handleRemoveFromCart}
+                    className="absolute top-3 right-3 z-10 p-2 bg-red-500 text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600 scale-90 hover:scale-110"
+                    title="Remove from Tray"
+                >
+                    <FaTrash size={12} />
+                </button>
+            )}
+
             {/* Image */}
             <div className="h-48 bg-gradient-to-r from-blue-50 to-white flex items-center justify-center p-4 overflow-hidden">
                 {product.image && product.image !== 'no-photo.jpg' ? (

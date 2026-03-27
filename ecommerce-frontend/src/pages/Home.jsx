@@ -1,10 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../redux/slices/productSlice';
 import ProductCard from '../components/ProductCard';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaChevronDown } from 'react-icons/fa';
 
 const CATEGORIES = ['All', 'Electronics', 'Cameras', 'Laptops', 'Accessories', 'Headphones', 'Books', 'Clothes/Shoes', 'Beauty/Health', 'Sports', 'Home'];
+
+const SORT_OPTIONS = [
+    { label: '🆕 Newest', value: 'newest' },
+    { label: '📅 Oldest', value: 'oldest' },
+    { label: '💰 Price: Low → High', value: 'low' },
+    { label: '💎 Price: High → Low', value: 'high' }
+];
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -13,9 +20,19 @@ const Home = () => {
     const [keyword, setKeyword] = useState('');
     const [category, setCategory] = useState('All');
     const [sort, setSort] = useState('newest');
+    const [isSortOpen, setIsSortOpen] = useState(false);
+    const sortRef = useRef(null);
 
     useEffect(() => {
         dispatch(fetchProducts(''));
+        
+        const handleClickOutside = (e) => {
+            if (sortRef.current && !sortRef.current.contains(e.target)) {
+                setIsSortOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [dispatch]);
 
     const handleSearch = (e) => {
@@ -24,7 +41,7 @@ const Home = () => {
     };
 
     // Client-side filter + sort
-    const filtered = products
+    const filtered = (products || [])
         .filter(p => category === 'All' || p.category === category)
         .sort((a, b) => {
             if (sort === 'low') return a.price - b.price;
@@ -75,22 +92,41 @@ const Home = () => {
                     </button>
                 </form>
 
-                <select
-                    value={sort}
-                    onChange={(e) => setSort(e.target.value)}
-                    className="px-4 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all bg-white text-sm font-medium"
-                >
-                    <option value="newest">🆕 Newest</option>
-                    <option value="oldest">📅 Oldest</option>
-                    <option value="low">💰 Price: Low → High</option>
-                    <option value="high">💎 Price: High → Low</option>
-                </select>
+                {/* Custom Sort Dropdown */}
+                <div className="relative w-full sm:w-64" ref={sortRef}>
+                    <button
+                        onClick={() => setIsSortOpen(!isSortOpen)}
+                        className="w-full flex justify-between items-center px-4 py-2.5 bg-white rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm font-medium hover:border-blue-400 group"
+                    >
+                        <span>{SORT_OPTIONS.find(o => o.value === sort)?.label}</span>
+                        <FaChevronDown className={`ml-2 text-gray-400 transition-transform duration-300 ${isSortOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    
+                    {isSortOpen && (
+                        <div className="absolute z-50 mt-2 w-full bg-white rounded-2xl shadow-2xl border border-blue-50 overflow-hidden animate-in fade-in zoom-in duration-200">
+                            {SORT_OPTIONS.map((option) => (
+                                <button
+                                    key={option.value}
+                                    onClick={() => {
+                                        setSort(option.value);
+                                        setIsSortOpen(false);
+                                    }}
+                                    className={`w-full text-left px-4 py-3 text-sm transition-all hover:bg-blue-50 font-medium ${
+                                        sort === option.value ? 'bg-blue-50 text-blue-700 font-bold' : 'text-gray-700'
+                                    }`}
+                                >
+                                    {option.label}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Results count */}
             {!loading && (
                 <p className="text-xs text-gray-400 font-medium px-1">
-                    Showing <span className="text-blue-700 font-bold">{filtered.length}</span> product{filtered.length !== 1 ? 's' : ''}
+                    Showing <span className="text-blue-700 font-bold">{filtered?.length || 0}</span> product{filtered?.length !== 1 ? 's' : ''}
                     {category !== 'All' && <span> in <span className="text-blue-700 font-bold">{category}</span></span>}
                 </p>
             )}
@@ -107,7 +143,7 @@ const Home = () => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {filtered.length > 0 ? (
+                    {filtered && filtered.length > 0 ? (
                         filtered.map((product) => (
                             <ProductCard key={product._id} product={product} />
                         ))

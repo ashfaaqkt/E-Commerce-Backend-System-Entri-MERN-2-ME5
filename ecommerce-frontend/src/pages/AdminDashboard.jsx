@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
-import { FaPlus, FaBoxOpen, FaClipboardList, FaEdit, FaTrash, FaTimes, FaSave } from 'react-icons/fa';
+import { FaPlus, FaBoxOpen, FaClipboardList, FaEdit, FaTrash, FaTimes, FaSave, FaTruck, FaCheck } from 'react-icons/fa';
 
 const CATEGORIES = ['Electronics', 'Cameras', 'Laptops', 'Accessories', 'Headphones', 'Food', 'Books', 'Clothes/Shoes', 'Beauty/Health', 'Sports', 'Outdoor', 'Home'];
 const EMPTY_FORM = { name: '', description: '', price: '', category: 'Electronics', stock: '', image: '' };
@@ -93,6 +93,14 @@ const AdminDashboard = () => {
         finally { setDeleteSubmitting(false); }
     };
 
+    // --- Update Order Status ---
+    const updateStatus = async (orderId, newStatus) => {
+        try {
+            await axiosInstance.put(`/orders/${orderId}/status`, { status: newStatus });
+            fetchOrders();
+        } catch (err) { console.error(err); }
+    };
+
     return (
         <div className="max-w-5xl mx-auto">
             <div className="bg-white rounded-3xl shadow-xl p-8 mb-6 border border-blue-50">
@@ -176,19 +184,49 @@ const AdminDashboard = () => {
                                 <th className="pb-3 pr-4">Items</th>
                                 <th className="pb-3 pr-4">Total (₹)</th>
                                 <th className="pb-3 pr-4">Status</th>
+                                <th className="pb-3 text-center">Update Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {orders.map((o) => (
+                            {orders.reverse().map((o) => (
                                 <tr key={o._id} className="border-b border-gray-50 hover:bg-blue-50 transition">
                                     <td className="py-3 pr-4 text-xs text-gray-400 font-mono">{o._id.substring(0,12)}...</td>
-                                    <td className="py-3 pr-4 text-gray-700">{o.user?.name || 'N/A'}</td>
+                                    <td className="py-3 pr-4">
+                                        <div className="flex flex-col">
+                                            <span className="font-semibold text-gray-700">{o.user?.name || 'N/A'}</span>
+                                            <span className="text-[10px] text-gray-400">{o.user?.email || ''}</span>
+                                        </div>
+                                    </td>
                                     <td className="py-3 pr-4 text-gray-700">{o.orderItems?.length} item(s)</td>
                                     <td className="py-3 pr-4 text-blue-700 font-bold">₹{o.totalPrice?.toLocaleString('en-IN')}</td>
                                     <td className="py-3 pr-4">
-                                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${o.isDelivered ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                                            {o.isDelivered ? 'Delivered' : 'Pending'}
+                                        <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                                            o.status === 'Delivered' ? 'bg-green-100 text-green-700' :
+                                            o.status === 'Failed' ? 'bg-red-100 text-red-700' :
+                                            o.status === 'Shipped' ? 'bg-blue-100 text-blue-700' :
+                                            o.status === 'Confirmed' ? 'bg-purple-100 text-purple-700' :
+                                            'bg-yellow-100 text-yellow-700'
+                                        }`}>
+                                            {o.status || 'Pending'}
                                         </span>
+                                    </td>
+                                    <td className="py-3">
+                                        <div className="flex gap-1 justify-center">
+                                            {o.status === 'Pending' && (
+                                                <button onClick={() => updateStatus(o._id, 'Confirmed')} title="Confirm" className="p-1.5 bg-purple-50 text-purple-600 rounded hover:bg-purple-100"><FaCheck size={12} /></button>
+                                            )}
+                                            {(o.status === 'Pending' || o.status === 'Confirmed') && (
+                                                <button onClick={() => updateStatus(o._id, 'Shipped')} title="Ship" className="p-1.5 bg-blue-50 text-blue-600 rounded hover:bg-blue-100"><FaTruck size={12} /></button>
+                                            )}
+                                            {o.status === 'Shipped' && (
+                                                <button onClick={() => updateStatus(o._id, 'Delivered')} title="Deliver" className="p-1.5 bg-green-50 text-green-600 rounded hover:bg-green-100"><FaCheck size={12} /></button>
+                                            )}
+                                            {o.status !== 'Delivered' && o.status !== 'Failed' && (
+                                                <button onClick={() => updateStatus(o._id, 'Failed')} title="Mark Failed" className="p-1.5 bg-red-50 text-red-600 rounded hover:bg-red-100"><FaTimes size={12} /></button>
+                                            )}
+                                            {o.status === 'Delivered' && <span className="text-xs text-green-500 font-bold">COMPLETED</span>}
+                                            {o.status === 'Failed' && <span className="text-xs text-red-500 font-bold">FAILED</span>}
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
@@ -227,7 +265,7 @@ const AdminDashboard = () => {
                             </button>
                             <button onClick={handleDelete} disabled={deleteSubmitting}
                                 className="flex-1 py-2.5 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 transition flex items-center justify-center gap-2">
-                                {deleteSubmitting ? <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> : <FaTrash />}
+                                {deleteSubmitting ? <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> : <FaTrash />}
                                 Delete
                             </button>
                         </div>
@@ -276,7 +314,7 @@ const ProductForm = ({ form, setForm, onSubmit, submitting, submitLabel, submitI
         <div className="md:col-span-2">
             <button type="submit" disabled={submitting}
                 className={`w-full py-3 rounded-xl text-white font-bold text-lg flex items-center justify-center gap-2 transition-all ${submitting ? 'bg-blue-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-700 to-blue-500 hover:from-blue-800 hover:to-blue-600 shadow-lg hover:shadow-xl'}`}>
-                {submitting ? <><svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Saving...</> : <>{submitIcon || <FaPlus />} {submitLabel}</>}
+                {submitting ? <><svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Saving...</> : <>{submitIcon || <FaPlus />} {submitLabel}</>}
             </button>
         </div>
     </form>

@@ -21,6 +21,18 @@ export const register = createAsyncThunk('auth/register', async (userData, thunk
     }
 });
 
+export const updateProfile = createAsyncThunk('auth/updateProfile', async (userData, thunkAPI) => {
+    try {
+        const response = await axiosInstance.put('/users/profile', userData);
+        const existingInfo = JSON.parse(localStorage.getItem('userInfo'));
+        const updatedInfo = { ...existingInfo, user: response.data.data };
+        localStorage.setItem('userInfo', JSON.stringify(updatedInfo));
+        return response.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.error || error.message);
+    }
+});
+
 export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
     await axiosInstance.get('/auth/logout');
     localStorage.removeItem('userInfo');
@@ -63,6 +75,17 @@ const authSlice = createSlice({
             state.token = action.payload.token;
         })
         .addCase(register.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+        .addCase(updateProfile.pending, (state) => {
+            state.loading = true;
+        })
+        .addCase(updateProfile.fulfilled, (state, action) => {
+            state.loading = false;
+            state.userInfo = action.payload;
+        })
+        .addCase(updateProfile.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;
         })
