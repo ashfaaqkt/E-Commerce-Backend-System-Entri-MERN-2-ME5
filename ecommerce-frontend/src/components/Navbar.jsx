@@ -46,7 +46,7 @@ const Navbar = () => {
                         title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
                     >
                         {darkMode ? (
-                            <FaSun className="text-yellow-400 text-xl animate-spin-slow" />
+                            <FaSun className="text-yellow-400 text-xl" />
                         ) : (
                             <FaMoon className="text-blue-200 text-xl" />
                         )}
