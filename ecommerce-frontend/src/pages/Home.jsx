@@ -111,9 +111,7 @@ const Home = () => {
                         <div className="text-white">
                             <h2 className="text-4xl font-black tracking-tighter uppercase italic drop-shadow-lg">Featured Drops</h2>
                         </div>
-                        <div className="text-right hidden sm:block">
-                            <span className={`text-[10px] font-bold uppercase tracking-widest border px-3 py-1 rounded-full backdrop-blur-md ${darkMode ? 'text-gray-400 border-gray-700 bg-gray-900/40' : 'text-blue-300 border-blue-500/30'}`}>Auto-Scroll Active</span>
-                        </div>
+
                     </div>
                     
                     <div className="relative flex overflow-hidden">
