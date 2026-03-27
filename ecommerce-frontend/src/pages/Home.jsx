@@ -88,9 +88,13 @@ const Home = () => {
         dispatch(fetchProducts(keyword));
     };
 
+    const { userInfo } = useSelector((state) => state.auth);
+
     // Client-side filter + sort
     const filtered = (products || [])
         .filter(p => category === 'All' || p.category === category)
+        // Hide admin's own products from them on the home page
+        .filter(p => !userInfo || p.user !== userInfo._id)
         .sort((a, b) => {
             if (sort === 'low') return a.price - b.price;
             if (sort === 'high') return b.price - a.price;
@@ -98,8 +102,10 @@ const Home = () => {
             return new Date(b.createdAt) - new Date(a.createdAt);
         });
 
-    // Top products for carousel
-    const carouselProducts = (products || []).slice(0, 10);
+    // Top products for carousel (also filtered to hide self-owned)
+    const carouselProducts = (products || [])
+        .filter(p => !userInfo || p.user !== userInfo._id)
+        .slice(0, 10);
 
     return (
         <div className="w-full space-y-8">

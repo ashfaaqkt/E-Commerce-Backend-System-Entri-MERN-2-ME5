@@ -69,8 +69,10 @@ exports.getAllOrders = async (req, res, next) => {
         const myProductIds = myProducts.map(p => p._id.toString());
 
         // Find orders that contain at least one of my products
+        // ALSO filter out orders placed BY this admin to prevent self-management
         const orders = await Order.find({
-            'orderItems.product': { $in: myProductIds }
+            'orderItems.product': { $in: myProductIds },
+            'user': { $ne: req.user.id }
         }).populate('user', 'name email').populate('orderItems.product', 'user');
 
         res.status(200).json({ success: true, data: orders });
