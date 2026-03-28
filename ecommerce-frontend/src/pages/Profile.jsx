@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { FaCamera, FaUser, FaUserShield, FaExchangeAlt } from 'react-icons/fa';
+import { FaCamera, FaUser, FaUserShield, FaExchangeAlt, FaExclamationTriangle, FaStore } from 'react-icons/fa';
 import axiosInstance from '../api/axiosInstance';
 import { updateProfile, switchRole } from '../redux/slices/authSlice';
 
@@ -19,6 +19,7 @@ const Profile = () => {
     const [success, setSuccess] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showRoleModal, setShowRoleModal] = useState(false);
 
     useEffect(() => {
         if (!userInfo) { navigate('/login'); return; }
@@ -61,28 +62,27 @@ const Profile = () => {
         }
     };
 
-    const handleRoleSwitch = async () => {
+    const handleRoleSwitch = () => {
+        setShowRoleModal(true);
+    };
+
+    const confirmRoleSwitch = async () => {
         const isSeller = userInfo?.role === 'admin';
-        const message = isSeller 
-            ? "⚠️ WARNING: Switching to a Customer account will PERMANENTLY DELETE all your listed products and order history. This action is IRREVERSIBLE. Are you sure you want to proceed?"
-            : "Do you want to switch to a Seller account? You will be able to list and manage your own products on the ME5 Store.";
-        
-        if (window.confirm(message)) {
-            setLoading(true);
-            try {
-                const resultAction = await dispatch(switchRole());
-                if (switchRole.fulfilled.match(resultAction)) {
-                    setSuccess(`✅ Successfully switched to ${isSeller ? 'Customer' : 'Seller'} account!`);
-                    if (!isSeller) navigate('/admin');
-                    else navigate('/');
-                } else {
-                    setError(resultAction.payload || 'Role switch failed');
-                }
-            } catch (err) {
-                setError('An unexpected error occurred');
-            } finally {
-                setLoading(false);
+        setShowRoleModal(false);
+        setLoading(true);
+        try {
+            const resultAction = await dispatch(switchRole());
+            if (switchRole.fulfilled.match(resultAction)) {
+                setSuccess(`✅ Successfully switched to ${isSeller ? 'Customer' : 'Seller'} account!`);
+                if (!isSeller) navigate('/admin');
+                else navigate('/');
+            } else {
+                setError(resultAction.payload || 'Role switch failed');
             }
+        } catch (err) {
+            setError('An unexpected error occurred');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -194,6 +194,65 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Custom Role Switch Modal */}
+            {showRoleModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    {/* Backdrop */}
+                    <div 
+                        className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300"
+                        onClick={() => !loading && setShowRoleModal(false)}
+                    ></div>
+                    
+                    {/* Modal Content */}
+                    <div className={`relative max-w-md w-full rounded-[2.5rem] p-8 md:p-10 border shadow-2xl animate-in zoom-in duration-300 ${
+                        darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-blue-50'
+                    }`}>
+                        <div className="flex flex-col items-center text-center">
+                            <div className={`mb-6 p-5 rounded-3xl ${
+                                userInfo?.role === 'admin' 
+                                    ? 'bg-red-500/10 text-red-500' 
+                                    : 'bg-blue-500/10 text-blue-500'
+                            }`}>
+                                {userInfo?.role === 'admin' ? <FaExclamationTriangle size={48} /> : <FaStore size={48} />}
+                            </div>
+                            
+                            <h2 className={`text-2xl font-black mb-4 ${darkMode ? 'text-white' : 'text-blue-900'}`}>
+                                {userInfo?.role === 'admin' ? 'Are you absolutely sure?' : 'Become a Seller!'}
+                            </h2>
+                            
+                            <p className={`mb-8 leading-relaxed font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                                {userInfo?.role === 'admin' 
+                                    ? "⚠️ WARNING: Switching to a Customer account will PERMANENTLY DELETE all your listed products and order history. This action is IRREVERSIBLE. Are you sure you want to proceed?"
+                                    : "You're about to upgrade to a Seller account! This will allow you to list and manage your own products on the ME5 Store."}
+                            </p>
+                            
+                            <div className="flex flex-col sm:flex-row gap-3 w-full">
+                                <button
+                                    onClick={() => setShowRoleModal(false)}
+                                    className={`flex-1 px-6 py-3.5 rounded-2xl font-bold transition-all ${
+                                        darkMode 
+                                            ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={confirmRoleSwitch}
+                                    className={`flex-1 px-6 py-3.5 rounded-2xl font-bold text-white transition-all shadow-lg hover:shadow-xl ${
+                                        userInfo?.role === 'admin'
+                                            ? 'bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600'
+                                            : 'bg-gradient-to-r from-blue-700 to-blue-500 hover:from-blue-800 hover:to-blue-600'
+                                    }`}
+                                >
+                                    {userInfo?.role === 'admin' ? 'Yes, Delete Everything' : 'Confirm Upgrade'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
