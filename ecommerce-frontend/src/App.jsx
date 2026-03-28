@@ -15,6 +15,7 @@ import Orders from './pages/Orders';
 import AdminDashboard from './pages/AdminDashboard';
 import ScrollToTop from './components/ScrollToTop';
 import Chatbot from './components/Chatbot';
+import SubNavbar from './components/SubNavbar';
 
 // Placeholder Pages
 const Contact = () => <div className="p-8 text-center text-2xl font-bold min-h-screen">Contact Page</div>;
@@ -50,8 +51,9 @@ function App() {
 
     return (
         <div className={`${darkMode ? 'dark' : ''} flex flex-col min-h-screen bg-gradient-to-b ${darkMode ? 'from-black to-gray-900 border-gray-800' : 'from-blue-900 to-white border-blue-100'} text-gray-800 transition-colors duration-500`}>
-            <Navbar />
-            <main className="flex-grow container mx-auto px-4 py-8">
+            <Navbar onOpenChange={setChatOpen} />
+            <SubNavbar />
+            <main className="container mx-auto px-6 py-10 flex-grow">
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />

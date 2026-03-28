@@ -10,14 +10,25 @@ export const fetchProducts = createAsyncThunk('products/fetchAll', async (keywor
     }
 });
 
+const initialState = {
+    products: [],
+    loading: false,
+    error: null,
+    keyword: '',
+    category: 'All',
+};
+
 const productSlice = createSlice({
     name: 'products',
-    initialState: {
-        products: [],
-        loading: false,
-        error: null,
+    initialState,
+    reducers: {
+        setKeyword: (state, action) => {
+            state.keyword = action.payload;
+        },
+        setCategory: (state, action) => {
+            state.category = action.payload;
+        },
     },
-    reducers: {},
     extraReducers: (builder) => {
         builder.addCase(fetchProducts.pending, (state) => {
             state.loading = true;
@@ -33,4 +44,5 @@ const productSlice = createSlice({
     },
 });
 
+export const { setKeyword, setCategory } = productSlice.actions;
 export default productSlice.reducer;
