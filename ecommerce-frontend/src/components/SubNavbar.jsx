@@ -10,7 +10,7 @@ const SubNavbar = () => {
     const { darkMode } = useSelector((state) => state.theme);
 
     return (
-        <div className={`w-full sticky top-[72px] z-40 transition-colors duration-500 rounded-b-3xl ${
+        <div className={`w-full sticky top-[72px] z-40 transition-colors duration-500 rounded-b-3xl overflow-hidden ${
             darkMode 
                 ? 'bg-black/80 border-b border-gray-800' 
                 : 'bg-white/90 border-b border-blue-50 shadow-sm'
