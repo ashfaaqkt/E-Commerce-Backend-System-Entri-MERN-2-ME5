@@ -1,6 +1,11 @@
-# 🏪 ME5 STORE - Premium MERN E-Commerce
+#  ME5 Project - MERN E-Commerce store "Basket"
 
 A sophisticated, end-to-end MERN (MongoDB, Express, React, Node.js) E-Commerce platform featuring a high-end dark-mode-first design, robust multi-tenant administration, and real-time business analytics.
+
+---
+
+## 🌐 Live Demo
+*Placeholder for live URL (To be added after hosting)*
 
 ---
 
@@ -19,9 +24,9 @@ A sophisticated, end-to-end MERN (MongoDB, Express, React, Node.js) E-Commerce p
 - **Safety Measures**: Admins are prevented from ordering their own products on the Home page and cannot manage their own customer orders in the dashboard.
 
 ### 💎 Premium User Experience
-- **Dark-Mode First**: A professional, high-contrast aesthetic with glassmorphism effects and backdrop blurs.
+- **Dark-Mode**: A professional, high-contrast aesthetic with glassmorphism effects and backdrop blurs.
 - **Dynamic Theme System**: Fully persistent theme toggle (Dark/Light) with system-aware scrollbars.
-- **Responsive Branding**: Floating rounded Navbar and Footer (3xl) that adapt to mobile view with icon-only labels.
+- **Responsive Branding**: Floating ounded Navbar and Footer (3xl) that adapt to mobile view with icon-only labels.
 - **Interactive Navigation**: Includes a smooth 'Go to Top' feature and real-time cart update animations.
 
 ### 📊 Real-Time Admin Analytics
@@ -102,10 +107,5 @@ ME5-Ecommerce/
 
 ---
 
-## 🌐 Live Demo
-*Placeholder for live URL (To be added after hosting)*
-
----
-
 ## 📄 License
-Practice and Education Purpose Only. Developed for the ME5 Assessment.
+Practice and Education Purpose Only. Developed for Entri Elevate - MERN - ME5 Assessment.
