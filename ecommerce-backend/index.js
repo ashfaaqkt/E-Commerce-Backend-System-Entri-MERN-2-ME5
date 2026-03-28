@@ -26,6 +26,7 @@ app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/analytics', require('./routes/adminRoutes'));
 app.use('/api/seed', require('./routes/seedRoutes'));
+app.use('/api/ai', require('./routes/aiRoutes'));
 
 app.use(errorHandler);
 

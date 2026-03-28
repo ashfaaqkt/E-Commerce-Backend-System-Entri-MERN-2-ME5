@@ -14,6 +14,7 @@ import OrderConfirmation from './pages/OrderConfirmation';
 import Orders from './pages/Orders';
 import AdminDashboard from './pages/AdminDashboard';
 import ScrollToTop from './components/ScrollToTop';
+import Chatbot from './components/Chatbot';
 
 // Placeholder Pages
 const Contact = () => <div className="p-8 text-center text-2xl font-bold min-h-screen">Contact Page</div>;
@@ -34,7 +35,8 @@ const AdminRoute = ({ children }) => {
 
 function App() {
     const { darkMode } = useSelector((state) => state.theme);
-    
+    const [chatOpen, setChatOpen] = useState(false);
+
     // Apply theme to document root for scrollbar and system theme awareness
     useEffect(() => {
         if (darkMode) {
@@ -65,7 +67,9 @@ function App() {
                 </Routes>
             </main>
             <Footer />
-            <ScrollToTop />
+            {/* Chatbot — passes chatOpen state setter so ScrollToTop can react */}
+            <Chatbot onOpenChange={setChatOpen} />
+            <ScrollToTop chatOpen={chatOpen} />
         </div>
     );
 }
