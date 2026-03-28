@@ -65,14 +65,14 @@ exports.getMyOrders = async (req, res, next) => {
 exports.getAllOrders = async (req, res, next) => {
     try {
         // Find products owned by this admin
-        const myProducts = await Product.find({ user: req.user.id }).select('_id');
+        const myProducts = await Product.find({ user: req.user._id }).select('_id');
         const myProductIds = myProducts.map(p => p._id.toString());
 
         // Find orders that contain at least one of my products
         // ALSO filter out orders placed BY this admin to prevent self-management
         const orders = await Order.find({
             'orderItems.product': { $in: myProductIds },
-            'user': { $ne: req.user.id }
+            'user': { $ne: req.user._id }
         }).populate('user', 'name email').populate('orderItems.product', 'user');
 
         res.status(200).json({ success: true, data: orders });
@@ -93,7 +93,7 @@ exports.updateOrderStatus = async (req, res, next) => {
 
         // Verify if admin owns at least one product in this order
         const isOwner = order.orderItems.some(item => 
-            item.product && item.product.user && item.product.user.toString() === req.user.id
+            item.product && item.product.user && item.product.user.toString() === req.user._id.toString()
         );
 
         if (!isOwner) {
