@@ -109,8 +109,8 @@ const AdminDashboard = () => {
         <div className="max-w-5xl mx-auto pb-12">
             <div className={`rounded-3xl shadow-xl p-8 mb-6 border transition-all flex flex-col md:flex-row justify-between items-center gap-6 ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-blue-50'}`}>
                 <div className="text-center md:text-left">
-                    <h1 className={`text-3xl font-extrabold mb-1 ${darkMode ? 'text-white' : 'text-blue-900'}`}>Admin Dashboard</h1>
-                    <p className={`${darkMode ? 'text-blue-400' : 'text-blue-400'} font-medium`}>Welcome, {userInfo?.name}</p>
+                    <h1 className={`text-3xl font-extrabold mb-1 ${darkMode ? 'text-white' : 'text-blue-900'}`}>🏪 Sale Board</h1>
+                    <p className={`${darkMode ? 'text-blue-400' : 'text-blue-400'} font-medium`}>Welcome, Seller {userInfo?.name}</p>
                 </div>
                 
                 <div className="flex gap-4 w-full md:w-auto">

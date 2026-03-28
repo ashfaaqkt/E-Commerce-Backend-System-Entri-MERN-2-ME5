@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { GoogleLogin } from '@react-oauth/google';
 import { login } from '../redux/slices/authSlice';
+import axiosInstance from '../api/axiosInstance';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [googleError, setGoogleError] = useState(null);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -19,9 +22,7 @@ const Login = () => {
     const redirect = location.search ? location.search.split('=')[1] : '/';
 
     useEffect(() => {
-        if (userInfo) {
-            navigate(redirect);
-        }
+        if (userInfo) navigate(redirect);
     }, [navigate, userInfo, redirect]);
 
     const submitHandler = (e) => {
@@ -29,19 +30,61 @@ const Login = () => {
         dispatch(login({ email, password }));
     };
 
+    const handleGoogleSuccess = async (credentialResponse) => {
+        setGoogleError(null);
+        try {
+            const response = await axiosInstance.post('/auth/google', {
+                credential: credentialResponse.credential,
+            });
+            const data = response.data;
+            localStorage.setItem('userInfo', JSON.stringify(data));
+            // Dispatch a manual login success
+            dispatch({ type: 'auth/login/fulfilled', payload: data });
+        } catch (err) {
+            const serverError = err.response?.data?.error;
+            if (serverError === 'ROLE_REQUIRED') {
+                setGoogleError('New account — please use the Register page to select your account type first.');
+            } else {
+                setGoogleError(err.response?.data?.message || 'Google sign-in failed. Please try again.');
+            }
+        }
+    };
+
     return (
         <div className="flex justify-center items-center min-h-[70vh]">
             <div className={`w-full max-w-md p-10 rounded-3xl shadow-2xl border transform transition-all hover:scale-[1.01] ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-blue-50'}`}>
-                <div className="text-center mb-10">
+                <div className="text-center mb-8">
                     <h2 className={`text-4xl font-extrabold mb-2 ${darkMode ? 'text-white' : 'text-blue-900'}`}>Welcome Back</h2>
                     <p className={`${darkMode ? 'text-blue-400' : 'text-blue-500'} font-medium`}>Sign in to access your account</p>
                 </div>
 
-                {error && (
+                {(error || googleError) && (
                     <div className={`mb-6 p-4 rounded-xl border text-center text-sm font-semibold ${darkMode ? 'bg-red-900/20 border-red-900/30 text-red-400' : 'bg-red-50 border-red-200 text-red-600'}`}>
-                        {error}
+                        {error || googleError}
                     </div>
                 )}
+
+                {/* Google Login */}
+                <div className="mb-6">
+                    <div className="flex justify-center">
+                        <GoogleLogin
+                            onSuccess={handleGoogleSuccess}
+                            onError={() => setGoogleError('Google sign-in failed. Please try again.')}
+                            theme={darkMode ? 'filled_black' : 'outline'}
+                            size="large"
+                            width="100%"
+                            text="signin_with"
+                            shape="rectangular"
+                        />
+                    </div>
+                </div>
+
+                {/* Divider */}
+                <div className="flex items-center gap-3 mb-6">
+                    <div className={`flex-1 h-px ${darkMode ? 'bg-gray-600' : 'bg-gray-200'}`}></div>
+                    <span className={`text-xs font-semibold uppercase tracking-wider ${darkMode ? 'text-gray-400' : 'text-gray-400'}`}>or continue with email</span>
+                    <div className={`flex-1 h-px ${darkMode ? 'bg-gray-600' : 'bg-gray-200'}`}></div>
+                </div>
 
                 <form onSubmit={submitHandler} className="space-y-6">
                     <div>
@@ -93,9 +136,9 @@ const Login = () => {
 
                 <div className="mt-8 text-center">
                     <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                        New Customer?{' '}
+                        New here?{' '}
                         <Link to="/register" className={`font-bold hover:underline transition-colors ${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'}`}>
-                            Register
+                            Create an Account
                         </Link>
                     </p>
                 </div>
