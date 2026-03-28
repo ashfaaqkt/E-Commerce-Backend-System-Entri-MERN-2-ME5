@@ -38,7 +38,7 @@ const Navbar = () => {
                 <Link to="/" className="hover:text-blue-200 transition-all duration-300 transform hover:scale-110 active:scale-95" title="Home">
                     <FaShoppingBasket className={`text-4xl ${darkMode ? 'text-blue-400' : 'text-white'}`} />
                 </Link>
-                <div className="flex items-center space-x-4 sm:space-x-6">
+                <div className="flex items-center space-x-2 sm:space-x-4">
                     {/* Theme Toggle */}
                     <button
                         onClick={() => dispatch(toggleTheme())}
