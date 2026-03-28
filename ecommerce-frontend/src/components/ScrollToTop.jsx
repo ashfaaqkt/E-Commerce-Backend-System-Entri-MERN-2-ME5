@@ -27,7 +27,7 @@ const ScrollToTop = ({ chatOpen }) => {
     };
 
     return (
-        <div className={`fixed z-50 transition-all duration-300 ${chatOpen ? 'bottom-[560px] left-8' : 'bottom-28 left-8'}`}>
+        <div className={`fixed z-[40] transition-all duration-300 ${chatOpen ? 'bottom-[660px] left-8' : 'bottom-28 left-8'}`}>
             {isVisible && (
                 <button
                     onClick={scrollToTop}
