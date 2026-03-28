@@ -49,7 +49,7 @@ exports.updateUserProfile = async (req, res, next) => {
 // @access  Private
 exports.switchRole = async (req, res, next) => {
     try {
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.user._id);
 
         if (!user) {
             return res.status(404).json({ success: false, error: 'User not found' });
@@ -60,8 +60,8 @@ exports.switchRole = async (req, res, next) => {
 
         // If switching from Seller to Customer, delete all products and orders
         if (oldRole === 'admin' && newRole === 'user') {
-            await Product.deleteMany({ user: req.user.id });
-            await Order.deleteMany({ user: req.user.id });
+            await Product.deleteMany({ user: req.user._id });
+            await Order.deleteMany({ user: req.user._id });
         }
 
         user.role = newRole;
