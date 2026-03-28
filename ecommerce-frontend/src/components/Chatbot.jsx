@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { FaTimes, FaPaperPlane, FaUser, FaSpinner } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { FaTimes, FaPaperPlane, FaUser, FaSpinner, FaSignInAlt } from 'react-icons/fa';
 import { RiSparkling2Fill } from 'react-icons/ri';
 import axiosInstance from '../api/axiosInstance';
 
@@ -155,12 +156,22 @@ const Chatbot = ({ onOpenChange }) => {
                                 <p className="text-blue-100 text-xs">Online · Powered by Gemini</p>
                             </div>
                         </div>
-                        {userInfo && (
-                            <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${
-                                userInfo.role === 'admin' ? 'bg-purple-500/30 text-purple-200' : 'bg-blue-500/30 text-blue-100'
-                            }`}>
-                                {userInfo.role === 'admin' ? 'Seller' : 'Customer'}
+                        {userInfo ? (
+                            <span className="text-xs px-2.5 py-1 rounded-full font-semibold bg-white/20 text-white backdrop-blur-sm">
+                                Hi {userInfo.name?.split(' ')[0] || 'User'}
                             </span>
+                        ) : (
+                            <div className="flex items-center gap-2">
+                                <span className="text-xs font-semibold text-white/80">Hi</span>
+                                <Link 
+                                    to="/login" 
+                                    onClick={() => toggleChat()}
+                                    className="text-xs px-2 py-1 rounded-lg font-bold bg-white text-blue-700 hover:bg-blue-50 transition-colors flex items-center gap-1.5 shadow-sm"
+                                >
+                                    <FaSignInAlt className="text-[10px]" />
+                                    Sign In
+                                </Link>
+                            </div>
                         )}
                     </div>
 
