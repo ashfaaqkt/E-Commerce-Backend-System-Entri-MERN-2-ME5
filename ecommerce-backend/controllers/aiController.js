@@ -17,6 +17,8 @@ const MODEL_CANDIDATES = [
     'gemini-2.0-flash',
     'gemini-flash-latest',
     'gemini-1.5-flash',
+    'gemini-1.5-flash-8b',
+    'gemini-1.5-flash-latest',
     'gemini-pro-latest',
     'gemini-pro',
     'gemini-1.0-pro',
@@ -120,7 +122,8 @@ exports.chat = async (req, res, next) => {
                 return res.status(200).json({ success: true, reply: response.text() });
             } catch (err) {
                 console.warn(`[SDK] ${modelName} failed: ${err.message.split('\n')[0]}`);
-                if (err.message?.includes('429')) break;
+                // Continue to next model even if it's a 429 (quota)
+                continue;
             }
         }
 
@@ -132,8 +135,8 @@ exports.chat = async (req, res, next) => {
                 return res.status(200).json({ success: true, reply });
             } catch (fetchErr) {
                 console.warn(`[Raw Fetch] ${modelName} failed: ${fetchErr.message}`);
-                // If it's a real API error (not 404), throw it
-                if (!fetchErr.message.includes('404')) throw fetchErr;
+                // Continue even if 429, only throw at the end
+                continue;
             }
         }
 
