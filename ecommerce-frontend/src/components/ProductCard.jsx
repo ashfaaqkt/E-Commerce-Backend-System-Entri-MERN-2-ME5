@@ -39,7 +39,7 @@ const ProductCard = ({ product }) => {
                 {isInCart && (
                     <button
                         onClick={handleRemoveFromCart}
-                        className="absolute top-3 right-3 z-10 p-2 bg-red-500 text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600 scale-90 hover:scale-110"
+                        className="absolute top-3 right-3 z-10 p-2 bg-red-500 text-white rounded-full shadow-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-red-600 scale-90 hover:scale-110"
                         title="Remove from Cart"
                     >
                         <FaTrash size={12} />
@@ -49,7 +49,7 @@ const ProductCard = ({ product }) => {
                 {/* AI Analyze Button */}
                 <button
                     onClick={() => setShowInsight(true)}
-                    className={`absolute top-3 left-3 z-10 flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110 active:scale-95 ${
+                    className={`absolute top-3 left-3 z-10 flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold shadow-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200 hover:scale-110 active:scale-95 ${
                         darkMode
                             ? 'bg-gradient-to-r from-blue-700 to-purple-700 text-white'
                             : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
