@@ -134,7 +134,7 @@ const Navbar = () => {
 
                     <Link 
                         to="/cart" 
-                        className="flex items-center px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-300 transform hover:scale-105 active:scale-95 group shadow-sm"
+                        className="flex items-center px-3 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-300 transform hover:scale-105 active:scale-95 group shadow-sm"
                     >
                         <FaShoppingCart className="mr-2 text-xl" />
                         <span className="font-semibold hidden sm:inline text-sm">Cart </span>
@@ -148,7 +148,7 @@ const Navbar = () => {
                     {userInfo ? (
                         <div className="relative" ref={dropdownRef}>
                             <button
-                                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none shadow-sm"
+                                className="flex items-center gap-2 px-3 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none shadow-sm"
                                 onClick={() => setDropdownOpen(!dropdownOpen)}
                             >
                                 <FaUser className="text-xl" />
@@ -193,7 +193,7 @@ const Navbar = () => {
                     ) : (
                         <Link 
                             to="/login" 
-                            className="flex items-center px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-sm"
+                            className="flex items-center px-4 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-sm"
                         >
                             <FaUser className="mr-2 text-lg" />
                             <span className="font-semibold hidden sm:inline text-sm">Log In</span>
