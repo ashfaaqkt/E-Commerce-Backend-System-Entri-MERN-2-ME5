@@ -94,7 +94,7 @@ const Home = () => {
     const filtered = (products || [])
         .filter(p => category === 'All' || p.category === category)
         // Hide admin's own products from them on the home page
-        .filter(p => !userInfo || p.user !== userInfo._id)
+        .filter(p => !userInfo || p.user !== userInfo.id)
         .sort((a, b) => {
             if (sort === 'low') return a.price - b.price;
             if (sort === 'high') return b.price - a.price;
@@ -104,7 +104,7 @@ const Home = () => {
 
     // Top products for carousel (also filtered to hide self-owned)
     const carouselProducts = (products || [])
-        .filter(p => !userInfo || p.user !== userInfo._id)
+        .filter(p => !userInfo || p.user !== userInfo.id)
         .slice(0, 10);
 
     return (
