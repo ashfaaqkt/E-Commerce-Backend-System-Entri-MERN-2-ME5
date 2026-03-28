@@ -63,25 +63,20 @@ exports.switchRole = async (req, res, next) => {
 
         console.log(`[SwitchRole] Attempting role transition: ${oldRole} -> ${newRole}`);
 
-        // If switching from Seller to Customer, delete all products and orders
         if (oldRole === 'admin' && newRole === 'user') {
-            console.log(`[SwitchRole] CLEANUP: Deleting all products and orders for user ${user.id}`);
-            const pResult = await Product.deleteMany({ user: user.id });
-            const oResult = await Order.deleteMany({ user: user.id });
-            console.log(`[SwitchRole] CLEANUP: Deleted ${pResult.deletedCount} products and ${oResult.deletedCount} orders`);
+            await Product.deleteMany({ user: user.id });
+            await Order.deleteMany({ user: user.id });
         }
 
         user.role = newRole;
         await user.save();
-
-        console.log(`[SwitchRole] SUCCESS: New role for ${user.id} is ${user.role}`);
 
         return res.status(200).json({
             success: true,
             data: user
         });
     } catch (err) {
-        console.error('[SwitchRole] CRITICAL ERROR:', err);
+        console.error('Role Switch Error:', err);
         return res.status(500).json({
             success: false,
             error: err.message || 'Server Error: Role Switching Failed'

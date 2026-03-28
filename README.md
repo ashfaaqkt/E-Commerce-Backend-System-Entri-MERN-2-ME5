@@ -1,44 +1,43 @@
-#  ME5 Project - MERN E-Commerce store "Basket"
+# 🧺 Basket Store — Premium MERN E-Commerce Platform
 
-A sophisticated, end-to-end MERN (MongoDB, Express, React, Node.js) E-Commerce platform featuring a high-end dark-mode-first design, robust multi-tenant administration, and real-time business analytics.
+A sophisticated, end-to-end MERN (MongoDB, Express, React, Node.js) E-Commerce platform featuring a high-end dark-mode-first design, robust role-switching capabilities, and integrated Google Gemini AI.
 
 ---
 
-## 🌐 Live Demo
-*Placeholder for live URL (To be added after hosting)*
+## 🌐 Live Demo & Deployment
+*   **Frontend**: Hosted on [Vercel](https://vercel.com/)
+*   **Backend**: Hosted on [Render](https://render.com/)
+*   *Live URLs coming soon!*
 
 ---
 
 ## 👨‍💻 Credits
 **Developed By:** [Ashfaaq Feroz Muhammad](https://github.com/ashfaaqkt)  
-**Project:** Entri Elevate - MERN ME5 Assessment (2026)
+**Project:** Entri Elevate - MERN ME5 Assessment (2026)  
+*ME5 is a credit reference to Module 5 End Project.*
 
 ---
 
 ## ✨ Key Features
 
-### 🛡️ Secure Multi-Tenant Architecture
-- **Admin Data Isolation**: Admins can only view, manage, and delete their own products. 
-- **Isolated Order Management**: The Admin Dashboard filters orders to show only those containing products owned by the logged-in admin.
-- **Backend Ownership Enforcement**: Every API request (PUT, DELETE, GET /admin) is protected by server-side ownership verification.
-- **Safety Measures**: Admins are prevented from ordering their own products on the Home page and cannot manage their own customer orders in the dashboard.
+### 🔄 Dynamic Role-Switching (Customer ↔ Seller)
+- **Fluid Transitions**: Users can switch between Customer and Seller roles instantly from their profile.
+- **Automated Cleanup**: Switching from Seller to Customer automatically clears associated product listings and order history to maintain account integrity.
+- **Instant Permissions**: Real-time permission updates grant immediate access to the **Sale Board** upon becoming a seller.
 
-### 💎 Premium User Experience
-- **Dark-Mode**: A professional, high-contrast aesthetic with glassmorphism effects and backdrop blurs.
-- **Dynamic Theme System**: Fully persistent theme toggle (Dark/Light) with system-aware scrollbars.
-- **Responsive Branding**: Floating ounded Navbar and Footer (3xl) that adapt to mobile view with icon-only labels.
-- **Interactive Navigation**: Includes a smooth 'Go to Top' feature and real-time cart update animations.
+### 🤖 Google Gemini AI Ecosystem
+- **Intelligent Assistant**: A persistent, theme-aware shopping assistant trained on store policies and product details.
+- **AI Sparkle Insights**: Generates 5-sentence expert analyses and value propositions for any product with a single click.
+- **High-Availability Fallback**: A robust backend mechanism that cycles through multiple Gemini models and SDK/REST fallbacks to ensure 0% downtime.
 
-### 📊 Real-Time Admin Analytics
-- **Dashboard Stats**: Integrated "Total Earnings" and "Total Orders" calculated dynamically based on admin-owned data.
-- **Status Tracking**: Manage lifecycle of orders from Pending to Delivered with theme-aware UI badges.
+### 💎 Premium Glassmorphism UI
+- **Tailwind CSS v4**: Built with the latest styling engine for maximum performance and modern aesthetics.
+- **Dark Mode First**: A professional, high-contrast aesthetic with smooth gradients, backdrop blurs, and interactive hover states.
+- **Mobile Responsive**: Floating rounded components that adapt seamlessly to any device.
 
----
-
-### 🤖 Gemini AI Smart Integration
-- **Intelligent Chatbot**: A persistent, theme-aware shopping assistant (bottom-left) powered by Gemini 2.0. Trained on store policies, product details, and shipping FAQs.
-- **AI Product Insights**: "Sparkle" AI button on every product card that generates 5-sentence expert analyses, features, and value propositions instantly.
-- **Infinite Fallback Logic**: Proprietary backend system that automatically cycles through 7+ Gemini model variants (Flash, Pro, Latest) and switches between SDK and Raw Fetch to ensure 0% downtime.
+### 📊 Professional Sale Board
+- **Seller Analytics**: Real-time tracking of total earnings and order volume.
+- **Order Management**: Comprehensive lifecycle tracking from "Pending" to "Delivered" with status-aware UI badges.
 
 ---
 
@@ -46,29 +45,29 @@ A sophisticated, end-to-end MERN (MongoDB, Express, React, Node.js) E-Commerce p
 
 | Layer | Technologies |
 |--- |--- |
-| **Frontend** | React, Redux Toolkit, Tailwind CSS v4, React Router 7 |
-| **Backend** | Node.js, Express, MongoDB, Mongoose, JWT |
-| **AI Engine** | Google Generative AI (Gemini 2.0 / 1.5), Raw Fetch REST API |
-| **Icons** | React Icons (FontAwesome, Hi-Stars) |
-| **State** | Persistent LocalStorage (Theme, Auth, Cart) |
+| **Frontend** | React 19, Redux Toolkit, Tailwind CSS v4, React Router 7 |
+| **Backend** | Node.js, Express 5, MongoDB, Mongoose 8, JWT |
+| **AI Engine** | Google Generative AI (Gemini 2.0 Flash / 1.5 Pro) |
+| **Design** | Lucide & React Icons, Google Fonts (Inter/Outfit) |
 
 ---
 
-## 📂 File Structure
+## 🏗️ Technical Architecture
 
-```text
-ME5-Ecommerce/
-├── ecommerce-backend/       # Node.js + Express API
-│   ├── config/              # Database connection
-│   ├── controllers/         # Business logic (Auth, Products, Orders)
-│   ├── middleware/          # JWT Protect, Admin Authorize, Error Handling
-│   ├── models/              # Mongoose Schemas (User, Product, Order)
-│   └── routes/              # API Endpoints
-└── ecommerce-frontend/      # React + Tailwind Frontend
-    ├── src/api/             # Axios instance configuration
-    ├── src/components/      # Reusable UI (Navbar, Footer, Cards)
-    ├── src/pages/           # Main views (Home, Admin, Profile, Cart)
-    └── src/redux/           # Global State (Slices for Auth, Cart, Theme)
+```mermaid
+graph TD
+    User((User)) -->|React + Vite| Frontend[Basket Frontend]
+    Frontend -->|Redux Toolkit| State[Global State Management]
+    Frontend -->|Axios| API[Basket API Gateway]
+    
+    subgraph Backend [Node.js / Express Server]
+        API --> Auth[JWT Protect Middleware]
+        Auth --> Controller[API Controllers]
+        Controller --> AI[Gemini AI Manager]
+        Controller --> DB[(MongoDB Atlas)]
+    end
+    
+    AI -->|Fallback Logic| Gemini[Google Generative AI]
 ```
 
 ---
@@ -84,13 +83,8 @@ ME5-Ecommerce/
    ```bash
    npm install
    ```
-3. Create a `.env` file and add:
-   ```env
-   PORT=5002
-   MONGO_URI=your_mongodb_uri
-   JWT_SECRET=your_secret_key
-   ```
-4. Seed initial products (optional):
+3. Create a `.env` file (see `.env.example`) and add your credentials.
+4. Seed initial products:
    ```bash
    node seeder.js
    ```
@@ -108,7 +102,8 @@ ME5-Ecommerce/
    ```bash
    npm install
    ```
-3. Start the application:
+3. Create a `.env` file and add `VITE_API_URL=http://localhost:5002/api`.
+4. Start the application:
    ```bash
    npm run dev
    ```
@@ -117,3 +112,4 @@ ME5-Ecommerce/
 
 ## 📄 License
 Practice and Education Purpose Only. Developed for Entri Elevate - MERN - ME5 Assessment.
+🎬🎨

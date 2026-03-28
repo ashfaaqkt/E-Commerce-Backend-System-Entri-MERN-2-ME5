@@ -61,7 +61,6 @@ async function rawFetchGemini(modelName, message, chatHistory = [], isChat = tru
             }
             contents.push({ role: 'user', parts: [{ text: message }] });
 
-            console.log(`[Raw Fetch ${version}] Trying model: ${modelName}...`);
             
             const response = await fetch(url, {
                 method: 'POST',
@@ -109,7 +108,6 @@ exports.chat = async (req, res, next) => {
         // 1. Try SDK (Standard)
         for (const modelName of MODEL_CANDIDATES) {
             try {
-                console.log(`[SDK] Attempting: ${modelName}...`);
                 const model = genAI.getGenerativeModel({ model: modelName });
                 const chat = model.startChat({
                     history: [
@@ -128,7 +126,6 @@ exports.chat = async (req, res, next) => {
         }
 
         // 2. Try Raw Fetch (Fallback)
-        console.warn('[SDK Failed] Switching to Raw Fetch fallback loop...');
         for (const modelName of MODEL_CANDIDATES) {
             try {
                 const reply = await rawFetchGemini(modelName, message, history);
@@ -170,7 +167,6 @@ Description: ${description}`;
         // Try SDK
         for (const modelName of MODEL_CANDIDATES) {
             try {
-                console.log(`[SDK Analysis] Attempting: ${modelName}...`);
                 const model = genAI.getGenerativeModel({ model: modelName });
                 const result = await model.generateContent(prompt);
                 const response = await result.response;
@@ -181,7 +177,6 @@ Description: ${description}`;
         }
 
         // Try Raw
-        console.warn('[SDK Analysis Failed] Trying Raw Fallback...');
         for (const modelName of MODEL_CANDIDATES) {
             try {
                 const analysis = await rawFetchGemini(modelName, prompt, [], false);

@@ -159,7 +159,7 @@ const Navbar = () => {
                                 <div className={`absolute right-0 mt-3 w-48 rounded-2xl shadow-2xl overflow-hidden z-50 border ${darkMode ? 'bg-gray-900 text-white border-gray-700' : 'bg-white text-gray-800 border-blue-100'}`}>
                                     {userInfo.role === 'admin' && (
                                         <Link
-                                            to="/admin"
+                                            to="/saleboard"
                                             onClick={() => setDropdownOpen(false)}
                                             className={`block px-4 py-3 font-medium transition-colors ${darkMode ? 'hover:bg-gray-800 text-blue-400' : 'hover:bg-blue-50 text-blue-700'}`}
                                         >

@@ -12,7 +12,7 @@ import Shipping from './pages/Shipping';
 import PlaceOrder from './pages/PlaceOrder';
 import OrderConfirmation from './pages/OrderConfirmation';
 import Orders from './pages/Orders';
-import AdminDashboard from './pages/AdminDashboard';
+import SaleBoard from './pages/SaleBoard';
 import ScrollToTop from './components/ScrollToTop';
 import Chatbot from './components/Chatbot';
 import SubNavbar from './components/SubNavbar';
@@ -65,11 +65,10 @@ function App() {
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
                     <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
-                    <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+                    <Route path="/saleboard" element={<AdminRoute><SaleBoard /></AdminRoute>} />
                 </Routes>
             </main>
             <Footer />
-            {/* Chatbot — passes chatOpen state setter so ScrollToTop can react */}
             <Chatbot onOpenChange={setChatOpen} />
             <ScrollToTop chatOpen={chatOpen} />
         </div>

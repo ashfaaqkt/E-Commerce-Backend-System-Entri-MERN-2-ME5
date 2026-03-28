@@ -74,7 +74,7 @@ const Profile = () => {
             const resultAction = await dispatch(switchRole());
             if (switchRole.fulfilled.match(resultAction)) {
                 setSuccess(`✅ Successfully switched to ${isSeller ? 'Customer' : 'Seller'} account!`);
-                if (!isSeller) navigate('/admin');
+                if (!isSeller) navigate('/saleboard');
                 else navigate('/');
             } else {
                 setError(resultAction.payload || 'Role switch failed');

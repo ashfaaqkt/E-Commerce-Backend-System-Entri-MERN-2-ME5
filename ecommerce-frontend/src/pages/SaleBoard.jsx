@@ -7,7 +7,7 @@ import { FaPlus, FaBoxOpen, FaClipboardList, FaEdit, FaTrash, FaTimes, FaSave, F
 const CATEGORIES = ['Electronics', 'Cameras', 'Laptops', 'Accessories', 'Headphones', 'Food', 'Books', 'Clothes/Shoes', 'Beauty/Health', 'Sports', 'Outdoor', 'Home'];
 const EMPTY_FORM = { name: '', description: '', price: '', category: 'Electronics', stock: '', image: '' };
 
-const AdminDashboard = () => {
+const SaleBoard = () => {
     const { userInfo } = useSelector((state) => state.auth);
     const { darkMode } = useSelector((state) => state.theme);
     const navigate = useNavigate();
@@ -339,4 +339,4 @@ const ProductForm = ({ form, setForm, onSubmit, submitting, submitLabel, submitI
     </form>
 );
 
-export default AdminDashboard;
+export default SaleBoard;
