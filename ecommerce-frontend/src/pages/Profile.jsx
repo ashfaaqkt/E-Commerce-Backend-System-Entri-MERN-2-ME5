@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { FaCamera, FaUser } from 'react-icons/fa';
+import { FaCamera, FaUser, FaUserShield, FaExchangeAlt } from 'react-icons/fa';
 import axiosInstance from '../api/axiosInstance';
-import { updateProfile } from '../redux/slices/authSlice';
+import { updateProfile, switchRole } from '../redux/slices/authSlice';
 
 const Profile = () => {
     const { userInfo } = useSelector((state) => state.auth);
@@ -58,6 +58,31 @@ const Profile = () => {
             setError('An unexpected error occurred');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleRoleSwitch = async () => {
+        const isSeller = userInfo?.role === 'admin';
+        const message = isSeller 
+            ? "⚠️ WARNING: Switching to a Customer account will PERMANENTLY DELETE all your listed products and order history. This action is IRREVERSIBLE. Are you sure you want to proceed?"
+            : "Do you want to switch to a Seller account? You will be able to list and manage your own products on the ME5 Store.";
+        
+        if (window.confirm(message)) {
+            setLoading(true);
+            try {
+                const resultAction = await dispatch(switchRole());
+                if (switchRole.fulfilled.match(resultAction)) {
+                    setSuccess(`✅ Successfully switched to ${isSeller ? 'Customer' : 'Seller'} account!`);
+                    if (!isSeller) navigate('/admin');
+                    else navigate('/');
+                } else {
+                    setError(resultAction.payload || 'Role switch failed');
+                }
+            } catch (err) {
+                setError('An unexpected error occurred');
+            } finally {
+                setLoading(false);
+            }
         }
     };
 
@@ -135,6 +160,39 @@ const Profile = () => {
                         {loading ? (<><svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Saving...</>) : 'Save Profile'}
                     </button>
                 </form>
+
+                {/* Role Switch Section */}
+                <div className={`mt-10 pt-8 border-t ${darkMode ? 'border-gray-700' : 'border-blue-100'}`}>
+                    <div className={`p-6 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4 ${darkMode ? 'bg-gray-900/40' : 'bg-blue-50/50'}`}>
+                        <div className="flex items-center gap-4">
+                            <div className={`p-3 rounded-xl ${darkMode ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-600'}`}>
+                                {userInfo?.role === 'admin' ? <FaUserShield size={24} /> : <FaExchangeAlt size={24} />}
+                            </div>
+                            <div>
+                                <h3 className={`font-bold ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                                    {userInfo?.role === 'admin' ? 'Seller Account Active' : 'Want to Sell with Us?'}
+                                </h3>
+                                <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                                    {userInfo?.role === 'admin' 
+                                        ? 'Manage your products and orders' 
+                                        : 'Upgrade to a seller account to start listing products'}
+                                </p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={handleRoleSwitch}
+                            disabled={loading}
+                            className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-sm flex items-center gap-2 ${
+                                userInfo?.role === 'admin'
+                                    ? (darkMode ? 'bg-red-900/20 text-red-400 border border-red-900/50 hover:bg-red-900/40' : 'bg-red-50 text-red-600 border border-red-100 hover:bg-red-100')
+                                    : (darkMode ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-md')
+                            }`}
+                        >
+                            <FaExchangeAlt size={14} />
+                            {userInfo?.role === 'admin' ? 'Switch to Customer Account' : 'Sell with Us'}
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );

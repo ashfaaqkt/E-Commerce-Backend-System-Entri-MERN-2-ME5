@@ -38,6 +38,18 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
     localStorage.removeItem('userInfo');
 });
 
+export const switchRole = createAsyncThunk('auth/switchRole', async (_, thunkAPI) => {
+    try {
+        const response = await axiosInstance.put('/users/switch-role');
+        const existingInfo = JSON.parse(localStorage.getItem('userInfo'));
+        const updatedInfo = { ...existingInfo, user: response.data.data };
+        localStorage.setItem('userInfo', JSON.stringify(updatedInfo));
+        return response.data.data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.error || error.message);
+    }
+});
+
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
 
 const initialState = {
@@ -90,6 +102,17 @@ const authSlice = createSlice({
             state.userInfo = action.payload;
         })
         .addCase(updateProfile.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+        .addCase(switchRole.pending, (state) => {
+            state.loading = true;
+        })
+        .addCase(switchRole.fulfilled, (state, action) => {
+            state.loading = false;
+            state.userInfo = action.payload;
+        })
+        .addCase(switchRole.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;
         })
