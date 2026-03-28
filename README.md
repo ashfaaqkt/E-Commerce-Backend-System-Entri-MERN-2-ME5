@@ -35,13 +35,21 @@ A sophisticated, end-to-end MERN (MongoDB, Express, React, Node.js) E-Commerce p
 
 ---
 
+### 🤖 Gemini AI Smart Integration
+- **Intelligent Chatbot**: A persistent, theme-aware shopping assistant (bottom-left) powered by Gemini 2.0. Trained on store policies, product details, and shipping FAQs.
+- **AI Product Insights**: "Sparkle" AI button on every product card that generates 5-sentence expert analyses, features, and value propositions instantly.
+- **Infinite Fallback Logic**: Proprietary backend system that automatically cycles through 7+ Gemini model variants (Flash, Pro, Latest) and switches between SDK and Raw Fetch to ensure 0% downtime.
+
+---
+
 ## 🛠️ Technology Stack
 
 | Layer | Technologies |
 |--- |--- |
 | **Frontend** | React, Redux Toolkit, Tailwind CSS v4, React Router 7 |
 | **Backend** | Node.js, Express, MongoDB, Mongoose, JWT |
-| **Icons** | React Icons (FontAwesome) |
+| **AI Engine** | Google Generative AI (Gemini 2.0 / 1.5), Raw Fetch REST API |
+| **Icons** | React Icons (FontAwesome, Hi-Stars) |
 | **State** | Persistent LocalStorage (Theme, Auth, Cart) |
 
 ---
