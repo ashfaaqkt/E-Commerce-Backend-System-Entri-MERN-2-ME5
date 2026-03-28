@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { FaShoppingCart, FaUser, FaChevronDown, FaSun, FaMoon, FaShoppingBasket, FaSearch, FaTimes } from 'react-icons/fa';
+import { FaShoppingCart, FaUser, FaChevronDown, FaSun, FaMoon, FaShoppingBasket, FaSearch, FaTimes, FaSignOutAlt } from 'react-icons/fa';
 import { logout } from '../redux/slices/authSlice';
 import { toggleTheme } from '../redux/slices/themeSlice';
 import { fetchProducts, setKeyword } from '../redux/slices/productSlice';
@@ -163,7 +163,7 @@ const Navbar = () => {
                                             onClick={() => setDropdownOpen(false)}
                                             className={`block px-4 py-3 font-medium transition-colors ${darkMode ? 'hover:bg-gray-800 text-blue-400' : 'hover:bg-blue-50 text-blue-700'}`}
                                         >
-                                            🛠 Admin Dashboard
+                                            📈 Sale Board
                                         </Link>
                                     )}
                                     <Link
@@ -183,8 +183,9 @@ const Navbar = () => {
                                     <hr className={darkMode ? 'border-gray-800' : 'border-gray-100'} />
                                     <button
                                         onClick={logoutHandler}
-                                        className={`block w-full text-left px-4 py-3 text-red-600 font-medium transition-colors ${darkMode ? 'hover:bg-red-900/20' : 'hover:bg-red-50'}`}
+                                        className={`flex items-center w-full text-left px-4 py-3 text-red-600 font-medium transition-colors ${darkMode ? 'hover:bg-red-900/20' : 'hover:bg-red-50'}`}
                                     >
+                                        <FaSignOutAlt className="mr-3 text-lg" />
                                         Logout
                                     </button>
                                 </div>
