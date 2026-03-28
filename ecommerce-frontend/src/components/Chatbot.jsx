@@ -15,7 +15,7 @@ const QUICK_SUGGESTIONS = [
 const Chatbot = ({ onOpenChange }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
-        { role: 'model', text: '👋 Hi! I\'m your ME5 STORE assistant powered by AI. I can help with orders, products, shipping, returns, and more. How can I help you today?' }
+        { role: 'model', text: '👋 Hi! I\'m your Basket AI assistant. I can help with orders, products, shipping, returns, and more. How can I help you today?' }
     ]);
     const [inputValue, setInputValue] = useState('');
     const [loading, setLoading] = useState(false);
@@ -130,7 +130,7 @@ const Chatbot = ({ onOpenChange }) => {
                             <RiSparkling2Fill className="text-white text-xl" />
                         </div>
                         <div className="flex-1">
-                            <h3 className="text-white font-bold text-sm leading-none">ME5 AI Assistant</h3>
+                            <h3 className="text-white font-bold text-sm leading-none">Basket AI</h3>
                             <div className="flex items-center gap-1.5 mt-1">
                                 <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
                                 <p className="text-blue-100 text-xs">Online · Powered by Gemini</p>

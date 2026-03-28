@@ -1,7 +1,7 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 // System prompt for the AI
-const STORE_SYSTEM_PROMPT = `You are a friendly, helpful shopping assistant for "ME5 STORE" — a premium Indian e-commerce platform. You help customers and sellers with:
+const STORE_SYSTEM_PROMPT = `You are a friendly, helpful shopping assistant for "Basket" (formerly ME5 STORE) — a premium Indian e-commerce platform. You help customers and sellers with:
 - Product recommendations, availability, and details
 - Order tracking, cancellation, and return policies
 - Shipping times (standard: 3–7 business days, expressed: 1–2 days)
@@ -48,7 +48,7 @@ async function rawFetchGemini(modelName, message, chatHistory = [], isChat = tru
             });
             contents.push({
                 role: 'model',
-                parts: [{ text: 'Understood. I am your ME5 STORE assistant. How can I help today?' }]
+                parts: [{ text: 'Understood. I am your Basket AI assistant. How can I help today?' }]
             });
 
             if (chatHistory.length > 0) {
