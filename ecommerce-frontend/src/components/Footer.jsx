@@ -14,7 +14,6 @@ const Footer = () => {
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6 border-b border-white/10 pb-6 mb-6">
                     <div className="flex items-center gap-2">
                         <FaShoppingBasket className={`text-3xl ${darkMode ? 'text-blue-400' : 'text-blue-200'}`} />
-                        <span className={`text-2xl font-bold tracking-tight ${darkMode ? 'text-white' : 'text-white'}`}>Basket</span>
                     </div>
                     <div className="text-sm">
                         <h3 className={`font-bold mb-1 ${darkMode ? 'text-blue-100' : 'text-white'}`}>Entri Elevate - MERN</h3>
@@ -26,7 +25,7 @@ const Footer = () => {
                 <p className={`${darkMode ? 'text-gray-500' : 'text-blue-300'} text-xs mb-6 italic`}>Practice and Education Purpose Only</p>
 
                 <div className="text-xs text-gray-500 flex flex-wrap items-center justify-center gap-2 pt-4 border-t border-white/5">
-                    &copy; {new Date().getFullYear()} <span className="font-bold">Basket</span>. All Rights Reserved.
+                    &copy; {new Date().getFullYear()} <span className="font-bold">ME5 E-Commerce</span>. All Rights Reserved.
                 </div>
             </div>
         </footer>
