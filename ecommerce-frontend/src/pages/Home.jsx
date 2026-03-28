@@ -5,8 +5,6 @@ import { addToCart } from '../redux/slices/cartSlice';
 import ProductCard from '../components/ProductCard';
 import { FaSearch, FaChevronDown, FaShoppingCart, FaCheck } from 'react-icons/fa';
 
-const CATEGORIES = ['All', 'Electronics', 'Cameras', 'Laptops', 'Accessories', 'Headphones', 'Books', 'Clothes/Shoes', 'Beauty/Health', 'Sports', 'Home'];
-
 const SORT_OPTIONS = [
     { label: '🆕 Newest', value: 'newest' },
     { label: '📅 Oldest', value: 'oldest' },
@@ -62,17 +60,21 @@ const CarouselCard = ({ product }) => {
 
 const Home = () => {
     const dispatch = useDispatch();
-    const { products, loading, error } = useSelector((state) => state.products);
+    const { products, loading, error, category, keyword } = useSelector((state) => state.products);
     const { darkMode } = useSelector((state) => state.theme);
+    const { userInfo } = useSelector((state) => state.auth);
 
-    const [keyword, setKeyword] = useState('');
-    const [category, setCategory] = useState('All');
     const [sort, setSort] = useState('newest');
     const [isSortOpen, setIsSortOpen] = useState(false);
     const sortRef = useRef(null);
 
     useEffect(() => {
-        dispatch(fetchProducts(''));
+        // Fetch products only if not already fetched or when keyword changes
+        // Since Search is now in Navbar, we'll let Navbar handle the primary search trigger
+        // But we still fetch on mount if empty
+        if (products.length === 0) {
+            dispatch(fetchProducts(''));
+        }
         
         const handleClickOutside = (e) => {
             if (sortRef.current && !sortRef.current.contains(e.target)) {
@@ -87,8 +89,6 @@ const Home = () => {
         e.preventDefault();
         dispatch(fetchProducts(keyword));
     };
-
-    const { userInfo } = useSelector((state) => state.auth);
 
     // Client-side filter + sort
     const filtered = (products || [])
@@ -139,43 +139,19 @@ const Home = () => {
                 </div>
             )}
 
-            {/* Category Pills — center */}
-            <div className="flex flex-wrap justify-center gap-2">
-                {CATEGORIES.map((cat) => (
-                    <button
-                        key={cat}
-                        onClick={() => setCategory(cat)}
-                        className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-all ${
-                            category === cat
-                                ? (darkMode ? 'bg-blue-600 text-white border-blue-600' : 'bg-blue-700 text-white border-blue-700 shadow-md')
-                                : (darkMode ? 'bg-gray-800 text-gray-400 border-gray-700 hover:text-white hover:border-blue-500' : 'bg-white text-gray-600 border-gray-200 hover:border-blue-400 hover:text-blue-600')
-                        }`}
-                    >
-                        {cat}
-                    </button>
-                ))}
-            </div>
+            {/* Sorting & Results Count — Top Right */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-1">
+                {!loading && (
+                    <p className={`text-sm font-semibold ${darkMode ? 'text-gray-400' : 'text-white'}`}>
+                        Showing <span className={`${darkMode ? 'text-blue-400' : 'text-blue-200'} font-bold`}>{filtered?.length || 0}</span> product{filtered?.length !== 1 ? 's' : ''}
+                        {category !== 'All' && <span> in <span className={`${darkMode ? 'text-blue-400' : 'text-blue-200'} font-bold text-lg ml-1`}>{category}</span></span>}
+                    </p>
+                )}
 
-            {/* Search + Sort Bar */}
-            <div className={`rounded-2xl shadow-sm p-3 border flex flex-col sm:flex-row gap-3 items-center transition-colors ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-blue-50'}`}>
-                <form onSubmit={handleSearch} className="flex flex-1 gap-2 w-full">
-                    <input
-                        type="text"
-                        value={keyword}
-                        onChange={(e) => setKeyword(e.target.value)}
-                        placeholder="Search products..."
-                        className={`flex-1 px-4 py-2.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800'}`}
-                    />
-                    <button type="submit" className="px-5 py-2.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 flex items-center gap-2 transition-all text-sm">
-                        <FaSearch /> Search
-                    </button>
-                </form>
-
-                {/* Custom Sort Dropdown */}
                 <div className="relative w-full sm:w-64" ref={sortRef}>
                     <button
                         onClick={() => setIsSortOpen(!isSortOpen)}
-                        className={`w-full flex justify-between items-center px-4 py-2.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm font-medium hover:border-blue-400 group ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-800'}`}
+                        className={`w-full flex justify-between items-center px-4 py-2.5 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm font-medium hover:border-blue-400 group ${darkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-blue-100 text-gray-800 shadow-sm'}`}
                     >
                         <span>{SORT_OPTIONS.find(o => o.value === sort)?.label}</span>
                         <FaChevronDown className={`ml-2 text-gray-400 transition-transform duration-300 ${isSortOpen ? 'rotate-180' : ''}`} />
@@ -203,14 +179,6 @@ const Home = () => {
                     )}
                 </div>
             </div>
-
-            {/* Results count */}
-            {!loading && (
-                <p className={`text-xs font-medium px-1 ${darkMode ? 'text-gray-400' : 'text-white'}`}>
-                    Showing <span className={`${darkMode ? 'text-blue-400' : 'text-blue-200'} font-bold`}>{filtered?.length || 0}</span> product{filtered?.length !== 1 ? 's' : ''}
-                    {category !== 'All' && <span> in <span className={`${darkMode ? 'text-blue-400' : 'text-blue-200'} font-bold`}>{category}</span></span>}
-                </p>
-            )}
 
             {/* Product Grid */}
             {loading ? (
