@@ -93,8 +93,12 @@ const Home = () => {
     // Client-side filter + sort
     const filtered = (products || [])
         .filter(p => category === 'All' || p.category === category)
-        // Hide admin's own products from them on the home page
-        .filter(p => !userInfo || p.user !== userInfo.id)
+        // Bulletproof self-product filter (ensure we compare ID strings)
+        .filter(p => {
+            if (!userInfo || !userInfo.id) return true;
+            const ownerId = p.user?._id || p.user;
+            return String(ownerId) !== String(userInfo.id);
+        })
         .sort((a, b) => {
             if (sort === 'low') return a.price - b.price;
             if (sort === 'high') return b.price - a.price;
@@ -104,7 +108,11 @@ const Home = () => {
 
     // Top products for carousel (also filtered to hide self-owned)
     const carouselProducts = (products || [])
-        .filter(p => !userInfo || p.user !== userInfo.id)
+        .filter(p => {
+            if (!userInfo || !userInfo.id) return true;
+            const ownerId = p.user?._id || p.user;
+            return String(ownerId) !== String(userInfo.id);
+        })
         .slice(0, 10);
 
     return (
