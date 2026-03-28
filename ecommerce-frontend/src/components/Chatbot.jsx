@@ -113,7 +113,7 @@ const Chatbot = ({ onOpenChange }) => {
             {/* Chat Toggle Button */}
             <button
                 onClick={toggleChat}
-                className={`fixed bottom-8 left-8 z-50 w-14 h-14 rounded-2xl shadow-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
+                className={`fixed bottom-8 left-8 z-50 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
                     isOpen
                         ? (darkMode ? 'bg-red-600 hover:bg-red-500' : 'bg-red-500 hover:bg-red-600')
                         : (darkMode ? 'bg-gradient-to-br from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500' : 'bg-gradient-to-br from-blue-700 to-purple-700 hover:from-blue-600 hover:to-purple-600')
@@ -125,7 +125,7 @@ const Chatbot = ({ onOpenChange }) => {
                 ) : (
                     <>
                         <RiSparkling2Fill className="text-white text-2xl" />
-                        <span className="absolute w-full h-full rounded-2xl animate-ping opacity-30 bg-blue-500"></span>
+                        <span className="absolute w-full h-full rounded-full animate-ping opacity-30 bg-blue-500"></span>
                     </>
                 )}
             </button>
