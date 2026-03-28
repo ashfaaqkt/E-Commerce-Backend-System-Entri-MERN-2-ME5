@@ -7,8 +7,8 @@ const Footer = () => {
 
     return (
         <footer className={`py-8 mt-12 transition-all duration-300 rounded-t-3xl ${darkMode
-                ? 'bg-gray-900/80 backdrop-blur-md border-t border-white/5 text-gray-400'
-                : 'bg-blue-900 text-white bg-opacity-95'
+            ? 'bg-gray-900/80 backdrop-blur-md border-t border-white/5 text-gray-400'
+            : 'bg-blue-900 text-white bg-opacity-95'
             }`}>
             <div className="container mx-auto px-6 text-center">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6 border-b border-white/10 pb-6 mb-6">
