@@ -49,42 +49,42 @@ exports.updateUserProfile = async (req, res, next) => {
 // @access  Private
 exports.switchRole = async (req, res, next) => {
     try {
-        console.log(`[SwitchRole] Attempting for user: ${req.user?._id}`);
+        console.log(`[SwitchRole] Start for user: ${req.user?._id}`);
         
         const user = await User.findById(req.user._id);
 
         if (!user) {
+            console.error('[SwitchRole] User document not found');
             return res.status(404).json({ success: false, error: 'User not found' });
         }
 
         const oldRole = user.role;
         const newRole = oldRole === 'admin' ? 'user' : 'admin';
 
-        console.log(`[SwitchRole] Transitioning from ${oldRole} to ${newRole}`);
+        console.log(`[SwitchRole] Changing role: ${oldRole} -> ${newRole}`);
 
         // If switching from Seller to Customer, delete all products and orders
         if (oldRole === 'admin' && newRole === 'user') {
             console.log(`[SwitchRole] Deleting data for user ${user._id}`);
-            const productsDeleted = await Product.deleteMany({ user: user._id });
-            const ordersDeleted = await Order.deleteMany({ user: user._id });
-            console.log(`[SwitchRole] Deleted ${productsDeleted.deletedCount} products and ${ordersDeleted.deletedCount} orders`);
+            const pInfo = await Product.deleteMany({ user: user._id });
+            const oInfo = await Order.deleteMany({ user: user._id });
+            console.log(`[SwitchRole] Cleanup: Deleted ${pInfo.deletedCount} products and ${oInfo.deletedCount} orders`);
         }
 
         user.role = newRole;
         await user.save();
 
-        console.log(`[SwitchRole] Role updated successfully to: ${user.role}`);
+        console.log(`[SwitchRole] Success: New role is ${user.role}`);
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             data: user
         });
     } catch (err) {
-        console.error('[SwitchRole] Error:', err);
-        // Safety check for next function to prevent "next is not a function"
-        if (typeof next === 'function') {
-            return next(err);
-        }
-        res.status(500).json({ success: false, error: err.message || 'Server Error' });
+        console.error('[SwitchRole] UNEXPECTED ERROR:', err);
+        return res.status(500).json({
+            success: false,
+            error: err.message || 'Server Error'
+        });
     }
 };
