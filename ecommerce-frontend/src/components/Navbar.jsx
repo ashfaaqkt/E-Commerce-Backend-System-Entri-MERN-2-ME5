@@ -52,32 +52,36 @@ const Navbar = () => {
                         )}
                     </button>
 
-                    <Link to="/cart" className="flex items-center hover:text-blue-300 transition group">
+                    <Link 
+                        to="/cart" 
+                        className="flex items-center px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-300 transform hover:scale-105 active:scale-95 group shadow-sm"
+                    >
                         <FaShoppingCart className="mr-2 text-xl" />
-                        <span className="font-semibold hidden sm:inline">Cart </span>
+                        <span className="font-semibold hidden sm:inline text-sm">Cart </span>
                         {cartItems.length > 0 && (
-                            <span className="ml-1 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full shadow-lg group-hover:scale-110 transition-transform">
+                            <span className="ml-1.5 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full shadow-lg group-hover:scale-110 transition-transform">
                                 {cartItems.reduce((acc, item) => acc + item.qty, 0)}
                             </span>
                         )}
                     </Link>
+
                     {userInfo ? (
                         <div className="relative" ref={dropdownRef}>
                             <button
-                                className="flex items-center gap-2 hover:text-blue-300 transition focus:outline-none"
+                                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none shadow-sm"
                                 onClick={() => setDropdownOpen(!dropdownOpen)}
                             >
                                 <FaUser className="text-xl" />
-                                <span className="font-semibold hidden sm:inline">{userInfo.name}</span>
+                                <span className="font-semibold hidden sm:inline text-sm">{userInfo.name.split(' ')[0]}</span>
                                 <FaChevronDown className={`text-xs transition-transform duration-200 hidden sm:inline ${dropdownOpen ? 'rotate-180' : ''}`} />
                             </button>
                             {dropdownOpen && (
-                                <div className={`absolute right-0 mt-2 w-48 rounded-xl shadow-2xl overflow-hidden z-50 ${darkMode ? 'bg-gray-800 text-white border border-gray-700' : 'bg-white text-gray-800'}`}>
+                                <div className={`absolute right-0 mt-3 w-48 rounded-2xl shadow-2xl overflow-hidden z-50 border ${darkMode ? 'bg-gray-900 text-white border-gray-700' : 'bg-white text-gray-800 border-blue-100'}`}>
                                     {userInfo.role === 'admin' && (
                                         <Link
                                             to="/admin"
                                             onClick={() => setDropdownOpen(false)}
-                                            className={`block px-4 py-3 font-medium transition-colors ${darkMode ? 'hover:bg-gray-700 text-blue-400' : 'hover:bg-blue-50 text-blue-700'}`}
+                                            className={`block px-4 py-3 font-medium transition-colors ${darkMode ? 'hover:bg-gray-800 text-blue-400' : 'hover:bg-blue-50 text-blue-700'}`}
                                         >
                                             🛠 Admin Dashboard
                                         </Link>
@@ -85,18 +89,18 @@ const Navbar = () => {
                                     <Link
                                         to="/profile"
                                         onClick={() => setDropdownOpen(false)}
-                                        className={`block px-4 py-3 font-medium transition-colors ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-blue-50'}`}
+                                        className={`block px-4 py-3 font-medium transition-colors ${darkMode ? 'hover:bg-gray-800' : 'hover:bg-blue-50'}`}
                                     >
                                         My Profile
                                     </Link>
                                     <Link
                                         to="/orders"
                                         onClick={() => setDropdownOpen(false)}
-                                        className={`block px-4 py-3 font-medium transition-colors ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-blue-50'}`}
+                                        className={`block px-4 py-3 font-medium transition-colors ${darkMode ? 'hover:bg-gray-800' : 'hover:bg-blue-50'}`}
                                     >
                                         My Orders
                                     </Link>
-                                    <hr className={darkMode ? 'border-gray-700' : 'border-gray-100'} />
+                                    <hr className={darkMode ? 'border-gray-800' : 'border-gray-100'} />
                                     <button
                                         onClick={logoutHandler}
                                         className={`block w-full text-left px-4 py-3 text-red-600 font-medium transition-colors ${darkMode ? 'hover:bg-red-900/20' : 'hover:bg-red-50'}`}
@@ -107,9 +111,12 @@ const Navbar = () => {
                             )}
                         </div>
                     ) : (
-                        <Link to="/login" className="flex items-center hover:text-blue-300 transition">
-                            <FaUser className="mr-2 text-xl" />
-                            <span className="font-semibold hidden sm:inline">Log In</span>
+                        <Link 
+                            to="/login" 
+                            className="flex items-center px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-sm"
+                        >
+                            <FaUser className="mr-2 text-lg" />
+                            <span className="font-semibold hidden sm:inline text-sm">Log In</span>
                         </Link>
                     )}
                 </div>
