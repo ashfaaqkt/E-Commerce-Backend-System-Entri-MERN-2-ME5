@@ -79,7 +79,7 @@ const Navbar = () => {
                                             onClick={() => setDropdownOpen(false)}
                                             className={`block px-4 py-3 font-medium transition-colors ${darkMode ? 'hover:bg-gray-700 text-blue-400' : 'hover:bg-blue-50 text-blue-700'}`}
                                         >
-                                            🏪 Sale Board
+                                            🛠 Admin Dashboard
                                         </Link>
                                     )}
                                     <Link

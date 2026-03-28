@@ -109,10 +109,10 @@ const AdminDashboard = () => {
         <div className="max-w-5xl mx-auto pb-12">
             <div className={`rounded-3xl shadow-xl p-8 mb-6 border transition-all flex flex-col md:flex-row justify-between items-center gap-6 ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-blue-50'}`}>
                 <div className="text-center md:text-left">
-                    <h1 className={`text-3xl font-extrabold mb-1 ${darkMode ? 'text-white' : 'text-blue-900'}`}>🏪 Sale Board</h1>
-                    <p className={`${darkMode ? 'text-blue-400' : 'text-blue-400'} font-medium`}>Welcome, Seller {userInfo?.name}</p>
+                    <h1 className={`text-3xl font-extrabold mb-1 ${darkMode ? 'text-white' : 'text-blue-900'}`}>Admin Dashboard</h1>
+                    <p className={`${darkMode ? 'text-blue-400' : 'text-blue-400'} font-medium`}>Welcome, {userInfo?.name}</p>
                 </div>
-                
+
                 <div className="flex gap-4 w-full md:w-auto">
                     <div className={`flex-1 md:w-40 p-4 rounded-2xl border text-center transition-all ${darkMode ? 'bg-gray-900/40 border-gray-700' : 'bg-blue-50 border-blue-100'}`}>
                         <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${darkMode ? 'text-gray-500' : 'text-blue-400'}`}>Total Earnings</p>
@@ -129,11 +129,10 @@ const AdminDashboard = () => {
             <div className="flex gap-3 mb-6 flex-wrap">
                 {[['products', <><FaBoxOpen /> Products ({products.length})</>], ['add', <><FaPlus /> Add Product</>], ['orders', <><FaClipboardList /> Orders ({orders.length})</>]].map(([key, label]) => (
                     <button key={key} onClick={() => setTab(key)}
-                        className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all ${
-                            tab === key 
-                                ? 'bg-blue-700 text-white shadow-lg' 
+                        className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all ${tab === key
+                                ? 'bg-blue-700 text-white shadow-lg'
                                 : (darkMode ? 'bg-gray-800 text-gray-400 border border-gray-700 hover:bg-gray-700' : 'bg-white text-blue-700 border border-blue-200 hover:bg-blue-50')
-                        }`}>
+                            }`}>
                         {label}
                     </button>
                 ))}
@@ -153,11 +152,11 @@ const AdminDashboard = () => {
                             </tr>
                         </thead>
                         <tbody>
-                             {products.map((p) => (
+                            {products.map((p) => (
                                 <tr key={p._id} className={`border-b transition ${darkMode ? 'border-gray-700/50 hover:bg-gray-700/30' : 'border-gray-50 hover:bg-blue-50'}`}>
                                     <td className="py-3 pr-4">
                                         <div className="flex items-center gap-3">
-                                            {p.image && <img src={p.image} alt={p.name} className={`w-10 h-10 object-cover rounded-lg border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`} onError={(e) => e.target.style.display='none'} />}
+                                            {p.image && <img src={p.image} alt={p.name} className={`w-10 h-10 object-cover rounded-lg border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`} onError={(e) => e.target.style.display = 'none'} />}
                                             <span className={`font-semibold ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>{p.name}</span>
                                         </div>
                                     </td>
@@ -209,9 +208,9 @@ const AdminDashboard = () => {
                             </tr>
                         </thead>
                         <tbody>
-                             {orders.reverse().map((o) => (
+                            {orders.reverse().map((o) => (
                                 <tr key={o._id} className={`border-b transition ${darkMode ? 'border-gray-700/50 hover:bg-gray-700/30' : 'border-gray-50 hover:bg-blue-50'}`}>
-                                    <td className="py-3 pr-4 text-xs font-mono text-gray-500">{o._id.substring(0,12)}...</td>
+                                    <td className="py-3 pr-4 text-xs font-mono text-gray-500">{o._id.substring(0, 12)}...</td>
                                     <td className="py-3 pr-4">
                                         <div className="flex flex-col">
                                             <span className={`font-semibold ${darkMode ? 'text-gray-200' : 'text-gray-700'}`}>{o.user?.name || 'N/A'}</span>
@@ -221,13 +220,12 @@ const AdminDashboard = () => {
                                     <td className={`py-3 pr-4 ${darkMode ? 'text-gray-400' : 'text-gray-700'}`}>{o.orderItems?.length} item(s)</td>
                                     <td className={`py-3 pr-4 font-bold ${darkMode ? 'text-blue-400' : 'text-blue-700'}`}>₹{o.totalPrice?.toLocaleString('en-IN')}</td>
                                     <td className="py-3 pr-4">
-                                        <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                                            o.status === 'Delivered' ? (darkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-700') :
-                                            o.status === 'Failed' ? (darkMode ? 'bg-red-900/30 text-red-400' : 'bg-red-100 text-red-700') :
-                                            o.status === 'Shipped' ? (darkMode ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-700') :
-                                            o.status === 'Confirmed' ? (darkMode ? 'bg-purple-900/30 text-purple-400' : 'bg-purple-100 text-purple-700') :
-                                            (darkMode ? 'bg-yellow-900/30 text-yellow-500' : 'bg-yellow-100 text-yellow-700')
-                                        }`}>
+                                        <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${o.status === 'Delivered' ? (darkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-700') :
+                                                o.status === 'Failed' ? (darkMode ? 'bg-red-900/30 text-red-400' : 'bg-red-100 text-red-700') :
+                                                    o.status === 'Shipped' ? (darkMode ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-700') :
+                                                        o.status === 'Confirmed' ? (darkMode ? 'bg-purple-900/30 text-purple-400' : 'bg-purple-100 text-purple-700') :
+                                                            (darkMode ? 'bg-yellow-900/30 text-yellow-500' : 'bg-yellow-100 text-yellow-700')
+                                            }`}>
                                             {o.status || 'Pending'}
                                         </span>
                                     </td>
@@ -302,34 +300,34 @@ const ProductForm = ({ form, setForm, onSubmit, submitting, submitLabel, submitI
     <form onSubmit={onSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="md:col-span-2">
             <label className={`text-sm font-bold mb-1 block ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Product Title</label>
-            <input name="name" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} required placeholder="e.g. Samsung Galaxy S25" className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300'}`} />
+            <input name="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required placeholder="e.g. Samsung Galaxy S25" className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300'}`} />
         </div>
         <div className="md:col-span-2">
             <label className={`text-sm font-bold mb-1 block ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Description</label>
-            <textarea name="description" value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} required rows={3} placeholder="Describe the product..." className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300'}`} />
+            <textarea name="description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} required rows={3} placeholder="Describe the product..." className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300'}`} />
         </div>
         <div>
             <label className={`text-sm font-bold mb-1 block ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Price (₹ INR)</label>
-            <input name="price" type="number" value={form.price} onChange={(e) => setForm({...form, price: e.target.value})} required min="1" placeholder="e.g. 49999" className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300'}`} />
+            <input name="price" type="number" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} required min="1" placeholder="e.g. 49999" className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300'}`} />
         </div>
         <div>
             <label className={`text-sm font-bold mb-1 block ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Stock</label>
-            <input name="stock" type="number" value={form.stock} onChange={(e) => setForm({...form, stock: e.target.value})} required min="0" placeholder="e.g. 50" className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300'}`} />
+            <input name="stock" type="number" value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} required min="0" placeholder="e.g. 50" className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300'}`} />
         </div>
         <div>
             <label className={`text-sm font-bold mb-1 block ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Category</label>
-            <select value={form.category} onChange={(e) => setForm({...form, category: e.target.value})} className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}>
+            <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}>
                 {categories.map(c => <option key={c} className={darkMode ? 'bg-gray-800' : 'bg-white'}>{c}</option>)}
             </select>
         </div>
         <div>
             <label className={`text-sm font-bold mb-1 block ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Image URL</label>
-            <input value={form.image} onChange={(e) => setForm({...form, image: e.target.value})} placeholder="https://..." className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300'}`} />
+            <input value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="https://..." className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300'}`} />
         </div>
         {form.image && (
             <div className="md:col-span-2">
                 <p className={`text-xs mb-1 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Image Preview:</p>
-                <img src={form.image} alt="preview" className={`h-24 object-contain rounded-lg border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`} onError={(e) => e.target.style.display='none'} />
+                <img src={form.image} alt="preview" className={`h-24 object-contain rounded-lg border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`} onError={(e) => e.target.style.display = 'none'} />
             </div>
         )}
         <div className="md:col-span-2">

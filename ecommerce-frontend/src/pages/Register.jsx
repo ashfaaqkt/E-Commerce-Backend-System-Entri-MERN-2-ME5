@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { GoogleLogin } from '@react-oauth/google';
 import { register } from '../redux/slices/authSlice';
-import axiosInstance from '../api/axiosInstance';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -14,8 +12,6 @@ const Register = () => {
     const [role, setRole] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [message, setMessage] = useState(null);
-    // State for Google pending registration (role required)
-    const [pendingGoogleCredential, setPendingGoogleCredential] = useState(null);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -28,56 +24,11 @@ const Register = () => {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        if (!role) { setMessage('Please select an account type (Seller or Customer)'); return; }
+        if (!role) { setMessage('Please select a role (Seller or Customer)'); return; }
         if (password !== confirmPassword) { setMessage('Passwords do not match'); return; }
         setMessage(null);
         dispatch(register({ name, email, password, role }));
     };
-
-    // Step 1: Google sends credential — check if new user needs a role
-    const handleGoogleSuccess = async (credentialResponse) => {
-        setMessage(null);
-        try {
-            const response = await axiosInstance.post('/auth/google', {
-                credential: credentialResponse.credential,
-            });
-            const data = response.data;
-            localStorage.setItem('userInfo', JSON.stringify(data));
-            dispatch({ type: 'auth/login/fulfilled', payload: data });
-        } catch (err) {
-            if (err.response?.data?.error === 'ROLE_REQUIRED') {
-                // New Google user — need them to pick a role
-                setPendingGoogleCredential(credentialResponse.credential);
-                setMessage('You\'re new here! Please select your account type below, then click "Complete Google Sign-Up".');
-            } else {
-                setMessage(err.response?.data?.message || 'Google sign-in failed.');
-            }
-        }
-    };
-
-    // Step 2: After role is selected, complete Google registration
-    const handleCompleteGoogleSignup = async () => {
-        if (!role) { setMessage('Please select Seller or Customer to continue.'); return; }
-        if (!pendingGoogleCredential) return;
-        setMessage(null);
-        try {
-            const response = await axiosInstance.post('/auth/google', {
-                credential: pendingGoogleCredential,
-                role,
-            });
-            const data = response.data;
-            localStorage.setItem('userInfo', JSON.stringify(data));
-            dispatch({ type: 'auth/login/fulfilled', payload: data });
-        } catch (err) {
-            setMessage(err.response?.data?.message || 'Google registration failed. Please try again.');
-        }
-    };
-
-    const roleButtonClass = (r) => `py-3 px-4 rounded-xl border-2 font-semibold transition-all text-center ${
-        role === r
-            ? (darkMode ? 'border-blue-500 bg-blue-900/30 text-blue-400' : 'border-blue-600 bg-blue-50 text-blue-700')
-            : (darkMode ? 'border-gray-700 text-gray-500 hover:border-gray-600' : 'border-gray-200 text-gray-500 hover:border-blue-300')
-    }`;
 
     return (
         <div className="flex justify-center items-center min-h-[80vh] py-8">
@@ -88,61 +39,41 @@ const Register = () => {
                 </div>
 
                 {(error || message) && (
-                    <div className={`mb-5 p-4 rounded-xl border text-center text-sm font-semibold ${
-                        message && !error ? (darkMode ? 'bg-blue-900/20 border-blue-900/30 text-blue-400' : 'bg-blue-50 border-blue-200 text-blue-700')
-                        : (darkMode ? 'bg-red-900/20 border-red-900/30 text-red-400' : 'bg-red-50 border-red-200 text-red-600')
-                    }`}>
+                    <div className={`mb-5 p-4 rounded-xl border text-center text-sm font-semibold ${darkMode ? 'bg-red-900/20 border-red-900/30 text-red-400' : 'bg-red-50 border-red-200 text-red-600'}`}>
                         {error || message}
                     </div>
                 )}
 
-                {/* Account Type Selector — always shown, required */}
-                <div className="mb-5">
-                    <label className={`block text-sm font-bold mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                        Account Type <span className="text-red-500">*</span>
-                    </label>
-                    <div className="grid grid-cols-2 gap-3">
-                        <button type="button" onClick={() => setRole('admin')} className={roleButtonClass('admin')}>
-                            🏪 Seller
-                        </button>
-                        <button type="button" onClick={() => setRole('user')} className={roleButtonClass('user')}>
-                            🛒 Customer
-                        </button>
-                    </div>
-                </div>
-
-                {/* Google Sign-up */}
-                <div className="mb-5">
-                    {pendingGoogleCredential ? (
-                        <button
-                            onClick={handleCompleteGoogleSignup}
-                            className="w-full py-3 px-4 rounded-xl font-bold text-white bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 shadow-lg transition-all flex items-center justify-center gap-2"
-                        >
-                            ✅ Complete Google Sign-Up as {role === 'admin' ? 'Seller' : role === 'user' ? 'Customer' : '...'}
-                        </button>
-                    ) : (
-                        <div className="flex justify-center">
-                            <GoogleLogin
-                                onSuccess={handleGoogleSuccess}
-                                onError={() => setMessage('Google sign-up failed. Please try again.')}
-                                theme={darkMode ? 'filled_black' : 'outline'}
-                                size="large"
-                                width="100%"
-                                text="signup_with"
-                                shape="rectangular"
-                            />
-                        </div>
-                    )}
-                </div>
-
-                {/* Divider */}
-                <div className="flex items-center gap-3 mb-5">
-                    <div className={`flex-1 h-px ${darkMode ? 'bg-gray-600' : 'bg-gray-200'}`}></div>
-                    <span className={`text-xs font-semibold uppercase tracking-wider ${darkMode ? 'text-gray-400' : 'text-gray-400'}`}>or with email</span>
-                    <div className={`flex-1 h-px ${darkMode ? 'bg-gray-600' : 'bg-gray-200'}`}></div>
-                </div>
-
                 <form onSubmit={submitHandler} className="space-y-4">
+                    {/* Role Selector */}
+                    <div>
+                        <label className={`block text-sm font-bold mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                            Account Type <span className="text-red-500">*</span>
+                        </label>
+                        <div className="grid grid-cols-2 gap-3">
+                            <button
+                                type="button"
+                                onClick={() => setRole('admin')}
+                                className={`py-3 px-4 rounded-xl border-2 font-semibold transition-all text-center ${role === 'admin'
+                                        ? (darkMode ? 'border-blue-500 bg-blue-900/30 text-blue-400' : 'border-blue-600 bg-blue-50 text-blue-700')
+                                        : (darkMode ? 'border-gray-700 text-gray-500 hover:border-gray-600' : 'border-gray-200 text-gray-500 hover:border-blue-300')
+                                    }`}
+                            >
+                                🏪 Seller
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setRole('user')}
+                                className={`py-3 px-4 rounded-xl border-2 font-semibold transition-all text-center ${role === 'user'
+                                        ? (darkMode ? 'border-blue-500 bg-blue-900/30 text-blue-400' : 'border-blue-600 bg-blue-50 text-blue-700')
+                                        : (darkMode ? 'border-gray-700 text-gray-500 hover:border-gray-600' : 'border-gray-200 text-gray-500 hover:border-blue-300')
+                                    }`}
+                            >
+                                🛒 Customer
+                            </button>
+                        </div>
+                    </div>
+
                     <div>
                         <label className={`block text-sm font-bold mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Full Name</label>
                         <input type="text" placeholder="Enter your name" value={name} onChange={(e) => setName(e.target.value)} required
