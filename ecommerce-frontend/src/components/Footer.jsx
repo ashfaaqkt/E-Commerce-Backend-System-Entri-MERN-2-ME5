@@ -25,7 +25,7 @@ const Footer = () => {
                 <p className={`${darkMode ? 'text-gray-500' : 'text-blue-300'} text-xs mb-6 italic`}>Practice and Education Purpose Only</p>
 
                 <div className="text-xs text-gray-500 flex flex-wrap items-center justify-center gap-2 pt-4 border-t border-white/5">
-                    &copy; {new Date().getFullYear()} <span className="font-bold">ME5 E-Commerce</span>. All Rights Reserved.
+                    &copy; {new Date().getFullYear()} <span className="font-bold">Basket Store</span>. All Rights Reserved.
                 </div>
             </div>
         </footer>

@@ -224,7 +224,7 @@ const Profile = () => {
                             <p className={`mb-8 leading-relaxed font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                                 {userInfo?.role === 'admin' 
                                     ? "⚠️ WARNING: Switching to a Customer account will PERMANENTLY DELETE all your listed products and order history. This action is IRREVERSIBLE. Are you sure you want to proceed?"
-                                    : "You're about to upgrade to a Seller account! This will allow you to list and manage your own products on the ME5 Store."}
+                                    : "You're about to upgrade to a Seller account! This will allow you to list and manage your own products on the Basket Store."}
                             </p>
                             
                             <div className="flex flex-col sm:flex-row gap-3 w-full">
