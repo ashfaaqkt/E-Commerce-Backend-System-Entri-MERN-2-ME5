@@ -36,7 +36,7 @@ const ProductCard = ({ product }) => {
                 <button 
                     onClick={handleRemoveFromCart}
                     className="absolute top-3 right-3 z-10 p-2 bg-red-500 text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600 scale-90 hover:scale-110"
-                    title="Remove from Tray"
+                    title="Remove from Cart"
                 >
                     <FaTrash size={12} />
                 </button>
