@@ -8,10 +8,10 @@ A full-stack MERN (MongoDB, Express, React, Node.js) e-commerce app with dark-mo
 
 | | URL |
 |---|-----|
-| **Frontend (Vercel)** | `https://YOUR-PROJECT.vercel.app` |
-| **Backend API (Render)** | `https://YOUR-SERVICE.onrender.com` |
+| **Frontend (Vercel)** | [https://e-commerce-backend-system-entri-mer-nu.vercel.app](https://e-commerce-backend-system-entri-mer-nu.vercel.app) |
+| **Backend API (Render)** | [https://e-commerce-backend-system-entri-mern-2.onrender.com](https://e-commerce-backend-system-entri-mern-2.onrender.com) |
 
-**Health check:** `GET https://YOUR-SERVICE.onrender.com/api/health`
+**Health check:** `GET https://e-commerce-backend-system-entri-mern-2.onrender.com/api/health`
 
 ---
 
