@@ -55,7 +55,7 @@ const Profile = () => {
             } else {
                 setError(resultAction.payload || 'Update failed');
             }
-        } catch (err) {
+        } catch {
             setError('An unexpected error occurred');
         } finally {
             setLoading(false);
@@ -79,7 +79,7 @@ const Profile = () => {
             } else {
                 setError(resultAction.payload || 'Role switch failed');
             }
-        } catch (err) {
+        } catch {
             setError('An unexpected error occurred');
         } finally {
             setLoading(false);

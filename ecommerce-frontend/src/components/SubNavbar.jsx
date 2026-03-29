@@ -1,8 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategory } from '../redux/slices/productSlice';
-
-export const CATEGORIES = ['All', 'Electronics', 'Cameras', 'Laptops', 'Accessories', 'Headphones', 'Books', 'Clothes/Shoes', 'Beauty/Health', 'Sports', 'Home'];
+import { SUB_NAV_CATEGORIES } from '../constants/categories';
 
 const SubNavbar = () => {
     const dispatch = useDispatch();
@@ -17,7 +16,7 @@ const SubNavbar = () => {
         } backdrop-blur-md`}>
             <div className="container mx-auto px-4 py-2 overflow-x-auto scrollbar-hide">
                 <div className="flex items-center justify-start md:justify-center gap-2 min-w-max pb-1">
-                    {CATEGORIES.map((cat) => (
+                    {SUB_NAV_CATEGORIES.map((cat) => (
                         <button
                             key={cat}
                             onClick={() => dispatch(setCategory(cat))}

@@ -60,7 +60,7 @@ const CarouselCard = ({ product }) => {
 
 const Home = () => {
     const dispatch = useDispatch();
-    const { products, loading, error, category, keyword } = useSelector((state) => state.products);
+    const { products, loading, error, category } = useSelector((state) => state.products);
     const { darkMode } = useSelector((state) => state.theme);
     const { userInfo } = useSelector((state) => state.auth);
 
@@ -69,13 +69,10 @@ const Home = () => {
     const sortRef = useRef(null);
 
     useEffect(() => {
-        // Fetch products only if not already fetched or when keyword changes
-        // Since Search is now in Navbar, we'll let Navbar handle the primary search trigger
-        // But we still fetch on mount if empty
         if (products.length === 0) {
             dispatch(fetchProducts(''));
         }
-        
+
         const handleClickOutside = (e) => {
             if (sortRef.current && !sortRef.current.contains(e.target)) {
                 setIsSortOpen(false);
@@ -83,12 +80,7 @@ const Home = () => {
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [dispatch]);
-
-    const handleSearch = (e) => {
-        e.preventDefault();
-        dispatch(fetchProducts(keyword));
-    };
+    }, [dispatch, products.length]);
 
     // Client-side filter + sort
     const filtered = (products || [])

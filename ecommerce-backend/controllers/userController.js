@@ -49,19 +49,14 @@ exports.updateUserProfile = async (req, res, next) => {
 // @access  Private
 exports.switchRole = async (req, res, next) => {
     try {
-        console.log(`[SwitchRole] START for user: ${req.user?.id || req.user?._id}`);
-        
         const user = await User.findById(req.user.id || req.user._id);
 
         if (!user) {
-            console.error('[SwitchRole] Error: User not found in DB');
             return res.status(404).json({ success: false, error: 'User not found' });
         }
 
         const oldRole = user.role;
         const newRole = oldRole === 'admin' ? 'user' : 'admin';
-
-        console.log(`[SwitchRole] Attempting role transition: ${oldRole} -> ${newRole}`);
 
         if (oldRole === 'admin' && newRole === 'user') {
             await Product.deleteMany({ user: user.id });

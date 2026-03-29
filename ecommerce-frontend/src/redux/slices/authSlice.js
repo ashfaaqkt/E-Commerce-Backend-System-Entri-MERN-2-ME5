@@ -33,7 +33,7 @@ export const updateProfile = createAsyncThunk('auth/updateProfile', async (userD
     }
 });
 
-export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
+export const logout = createAsyncThunk('auth/logout', async () => {
     await axiosInstance.get('/auth/logout');
     localStorage.removeItem('userInfo');
 });

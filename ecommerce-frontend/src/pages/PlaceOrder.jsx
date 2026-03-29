@@ -9,7 +9,6 @@ const PlaceOrder = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const cart = useSelector((state) => state.cart);
-    const { userInfo } = useSelector((state) => state.auth);
     const { darkMode } = useSelector((state) => state.theme);
 
     const [loading, setLoading] = useState(false);

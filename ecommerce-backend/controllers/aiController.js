@@ -99,6 +99,14 @@ async function rawFetchGemini(modelName, message, chatHistory = [], isChat = tru
 exports.chat = async (req, res, next) => {
     try {
         const { message, history } = req.body;
+
+        if (!process.env.GEMINI_API_KEY?.trim()) {
+            return res.status(503).json({
+                success: false,
+                error: 'AI is not configured. Set GEMINI_API_KEY on the server.',
+            });
+        }
+
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
         if (!message) {
@@ -152,6 +160,14 @@ exports.chat = async (req, res, next) => {
 exports.analyzeProduct = async (req, res, next) => {
     try {
         const { name, description, category, price, stock } = req.body;
+
+        if (!process.env.GEMINI_API_KEY?.trim()) {
+            return res.status(503).json({
+                success: false,
+                error: 'AI is not configured. Set GEMINI_API_KEY on the server.',
+            });
+        }
+
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
         if (!name) {

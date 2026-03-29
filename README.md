@@ -1,115 +1,209 @@
-# 🧺 Basket Store — Premium MERN E-Commerce Platform
+# Basket Store — Premium MERN E-Commerce Platform
 
-A sophisticated, end-to-end MERN (MongoDB, Express, React, Node.js) E-Commerce platform featuring a high-end dark-mode-first design, robust role-switching capabilities, and integrated Google Gemini AI.
-
----
-
-## 🌐 Live Demo & Deployment
-*   **Frontend**: Hosted on [Vercel](https://vercel.com/)
-*   **Backend**: Hosted on [Render](https://render.com/)
-*   *Live URLs coming soon!*
+A full-stack MERN (MongoDB, Express, React, Node.js) e-commerce app with dark-mode UI, seller/customer role switching, and Google Gemini–powered chat and product insights.
 
 ---
 
-## 👨‍💻 Credits
-**Developed By:** [Ashfaaq Feroz Muhammad](https://github.com/ashfaaqkt)  
-**Project:** Entri Elevate - MERN ME5 Assessment (2026)  
-*ME5 is a credit reference to Module 5 End Project.*
+## Live demo
+
+| | URL |
+|---|-----|
+| **Frontend (Vercel)** | `https://YOUR-PROJECT.vercel.app` — replace with your Vercel production URL after you deploy. |
+| **Backend API (Render)** | `https://YOUR-SERVICE.onrender.com` — replace with your Render web service URL. |
+
+**Health check:** `GET https://YOUR-SERVICE.onrender.com/api/health`
 
 ---
 
-## ✨ Key Features
+## Repository structure
 
-### 🔄 Dynamic Role-Switching (Customer ↔ Seller)
-- **Fluid Transitions**: Users can switch between Customer and Seller roles instantly from their profile.
-- **Automated Cleanup**: Switching from Seller to Customer automatically clears associated product listings and order history to maintain account integrity.
-- **Instant Permissions**: Real-time permission updates grant immediate access to the **Sale Board** upon becoming a seller.
-
-### 🤖 Google Gemini AI Ecosystem
-- **Intelligent Assistant**: A persistent, theme-aware shopping assistant trained on store policies and product details.
-- **AI Sparkle Insights**: Generates 5-sentence expert analyses and value propositions for any product with a single click.
-- **High-Availability Fallback**: A robust backend mechanism that cycles through multiple Gemini models and SDK/REST fallbacks to ensure 0% downtime.
-
-### 💎 Premium Glassmorphism UI
-- **Tailwind CSS v4**: Built with the latest styling engine for maximum performance and modern aesthetics.
-- **Dark Mode First**: A professional, high-contrast aesthetic with smooth gradients, backdrop blurs, and interactive hover states.
-- **Mobile Responsive**: Floating rounded components that adapt seamlessly to any device.
-
-### 📊 Professional Sale Board
-- **Seller Analytics**: Real-time tracking of total earnings and order volume.
-- **Order Management**: Comprehensive lifecycle tracking from "Pending" to "Delivered" with status-aware UI badges.
-
----
-
-## 🛠️ Technology Stack
-
-| Layer | Technologies |
-|--- |--- |
-| **Frontend** | React 19, Redux Toolkit, Tailwind CSS v4, React Router 7 |
-| **Backend** | Node.js, Express 5, MongoDB, Mongoose 8, JWT |
-| **AI Engine** | Google Generative AI (Gemini 2.0 Flash / 1.5 Pro) |
-| **Design** | Lucide & React Icons, Google Fonts (Inter/Outfit) |
-
----
-
-## 🏗️ Technical Architecture
-
-```mermaid
-graph TD
-    User((User)) -->|React + Vite| Frontend[Basket Frontend]
-    Frontend -->|Redux Toolkit| State[Global State Management]
-    Frontend -->|Axios| API[Basket API Gateway]
-    
-    subgraph Backend [Node.js / Express Server]
-        API --> Auth[JWT Protect Middleware]
-        Auth --> Controller[API Controllers]
-        Controller --> AI[Gemini AI Manager]
-        Controller --> DB[(MongoDB Atlas)]
-    end
-    
-    AI -->|Fallback Logic| Gemini[Google Generative AI]
+```
+ME5 Ecommerce-backend 2.0/
+├── README.md
+├── render.yaml                 # Optional Render Blueprint (monorepo → backend folder)
+├── ecommerce-backend/
+│   ├── index.js                # Express app, CORS, routes
+│   ├── seeder.js               # Seed sample products
+│   ├── package.json
+│   ├── .env.example            # Copy to .env locally (never commit .env)
+│   ├── config/
+│   │   └── dbConnection.js
+│   ├── controllers/            # auth, users, products, orders, admin, AI
+│   ├── middleware/
+│   ├── models/
+│   └── routes/
+└── ecommerce-frontend/
+    ├── index.html
+    ├── vite.config.js
+    ├── vercel.json             # SPA fallback for React Router
+    ├── package.json
+    ├── .env.example
+    └── src/
+        ├── main.jsx
+        ├── App.jsx
+        ├── api/
+        │   └── axiosInstance.js
+        ├── components/         # Navbar, Footer, Chatbot, ProductCard, etc.
+        ├── constants/
+        ├── pages/
+        ├── redux/
+        └── index.css
 ```
 
 ---
 
-## 🚀 Local Development
+## Credits
 
-### 1. Backend Setup
-1. Navigate to the backend folder:
-   ```bash
-   cd ecommerce-backend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file (see `.env.example`) and add your credentials.
-4. Seed initial products:
-   ```bash
-   node seeder.js
-   ```
-5. Start the server:
-   ```bash
-   npm run dev
-   ```
-
-### 2. Frontend Setup
-1. Navigate to the frontend folder:
-   ```bash
-   cd ecommerce-frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file and add `VITE_API_URL=http://localhost:5002/api`.
-4. Start the application:
-   ```bash
-   npm run dev
-   ```
+**Developed by:** [Ashfaaq Feroz Muhammad](https://github.com/ashfaaqkt)  
+**Context:** Entri Elevate — MERN ME5 assessment (2026)
 
 ---
 
-## 📄 License
-Practice and Education Purpose Only. Developed for Entri Elevate - MERN - ME5 Assessment.
-🎬🎨
+## Key features
+
+### Role switching (customer ↔ seller)
+
+- Toggle role from profile; seller gets access to **Sale Board**.
+- Switching seller → customer clears that user’s listed products and orders (by design).
+
+### Google Gemini AI
+
+- Basket AI chat (`/api/ai/chat`) and product analysis (`/api/ai/analyze-product`) with model fallbacks.
+
+### UI
+
+- Tailwind CSS v4, glass-style layout, responsive layout, theme toggle.
+
+### Seller tools
+
+- Sale Board for listings and order status updates.
+
+---
+
+## Technology stack
+
+| Layer | Stack |
+|-------|--------|
+| Frontend | React 19, Redux Toolkit, Tailwind CSS v4, React Router 7, Vite |
+| Backend | Node.js, Express 5, MongoDB / Mongoose, JWT |
+| AI | Google Generative AI (Gemini) |
+
+---
+
+## Architecture
+
+```mermaid
+graph TD
+    User((User)) -->|React + Vite| Frontend[Basket Frontend]
+    Frontend -->|Redux Toolkit| State[Global State]
+    Frontend -->|Axios| API[Basket REST API]
+    subgraph Backend [Express]
+        API --> Auth[JWT Middleware]
+        Auth --> Controller[Controllers]
+        Controller --> AI[Gemini]
+        Controller --> DB[(MongoDB Atlas)]
+    end
+```
+
+---
+
+## Local development
+
+### Backend
+
+```bash
+cd ecommerce-backend
+npm install
+cp .env.example .env
+# Edit .env: MONGO_URI, JWT_SECRET, GEMINI_API_KEY, FRONTEND_URL
+npm run seed    # optional: seed products
+npm run dev     # nodemon
+```
+
+Server defaults to port **5002** if `PORT` is unset.
+
+### Frontend
+
+```bash
+cd ecommerce-frontend
+npm install
+cp .env.example .env
+# Set VITE_API_URL=http://127.0.0.1:5002/api
+npm run dev
+```
+
+---
+
+## Deployment (Render backend + Vercel frontend)
+
+### Prerequisites
+
+1. Code pushed to **GitHub**.
+2. **MongoDB Atlas** cluster + database user + IP allowlist (or `0.0.0.0/0` for cloud hosts).
+3. **Google AI Studio** API key for Gemini (`GEMINI_API_KEY`).
+4. Strong random **`JWT_SECRET`** for production.
+
+### A. Backend on Render
+
+1. Open [Render](https://render.com) → sign in → **New** → **Web Service**.
+2. Connect the GitHub repo that contains this project.
+3. Configure:
+   - **Root Directory:** `ecommerce-backend`
+   - **Runtime:** Node
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start` (runs `node index.js`)
+   - **Instance type:** Free tier is fine for demos (cold starts apply).
+4. **Environment** (Render dashboard → Environment):
+   - `MONGO_URI` — Atlas connection string
+   - `JWT_SECRET` — long random string
+   - `GEMINI_API_KEY` — Gemini key
+   - `FRONTEND_URL` — your **Vercel** production URL (e.g. `https://my-app.vercel.app`).  
+     For preview deploys, use a comma-separated list:  
+     `https://my-app.vercel.app,https://my-app-git-branch-user.vercel.app`
+   - `NODE_VERSION` — e.g. `20` (optional; helps consistency)
+5. Deploy and wait until the service is **Live**. Copy the URL, e.g. `https://basket-api-xxxx.onrender.com`.
+6. Optional: visit `https://YOUR-SERVICE.onrender.com/api/health` — should return JSON success.
+
+**Seed data on Render:** run `node seeder.js` locally against production `MONGO_URI`, or add a one-off script / Shell in Render (avoid exposing admin routes in production without protection).
+
+### B. Frontend on Vercel
+
+1. Open [Vercel](https://vercel.com) → **Add New** → **Project** → import the same GitHub repo.
+2. Configure:
+   - **Framework Preset:** Vite
+   - **Root Directory:** `ecommerce-frontend`
+3. **Environment Variables:**
+   - `VITE_API_URL` = `https://YOUR-SERVICE.onrender.com/api` (no trailing slash after `api`)
+4. Deploy. Copy the production URL (e.g. `https://my-app.vercel.app`).
+5. Go back to **Render** → update `FRONTEND_URL` to that exact Vercel URL → **Manual Deploy** if needed so CORS allows your frontend.
+
+### C. After both are live
+
+1. Update the **Live demo** table at the top of this README with your real Vercel and Render URLs.
+2. Confirm login, product listing, cart, and AI features against production.
+
+---
+
+## Environment variables (summary)
+
+**Render (`ecommerce-backend`):**
+
+| Variable | Purpose |
+|----------|---------|
+| `MONGO_URI` | MongoDB connection string |
+| `JWT_SECRET` | JWT signing secret |
+| `GEMINI_API_KEY` | Google Gemini API key |
+| `FRONTEND_URL` | Vercel origin(s), comma-separated if multiple |
+| `PORT` | Set automatically on Render; optional locally |
+
+**Vercel (`ecommerce-frontend`):**
+
+| Variable | Purpose |
+|----------|---------|
+| `VITE_API_URL` | Public API base, must end with `/api` |
+
+---
+
+## License
+
+Educational / assessment use. Entri Elevate — MERN ME5.

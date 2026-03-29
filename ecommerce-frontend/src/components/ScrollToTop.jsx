@@ -27,11 +27,14 @@ const ScrollToTop = ({ chatOpen }) => {
     };
 
     return (
-        <div className={`fixed z-[40] transition-all duration-300 ${chatOpen ? 'bottom-[660px] left-8' : 'bottom-24 left-8'}`}>
+        <div
+            className={`fixed z-[40] left-8 w-14 flex justify-center transition-all duration-300 ${chatOpen ? 'bottom-[660px]' : 'bottom-24'}`}
+        >
             {isVisible && (
                 <button
+                    type="button"
                     onClick={scrollToTop}
-                    className={`p-4 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 active:scale-95 ${
+                    className={`w-14 h-14 shrink-0 flex items-center justify-center rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 active:scale-95 ${
                         darkMode
                             ? 'bg-blue-600 text-white hover:bg-blue-500'
                             : 'bg-blue-800 text-white hover:bg-blue-700'

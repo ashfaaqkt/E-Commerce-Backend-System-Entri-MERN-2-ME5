@@ -4,7 +4,6 @@ import { FaBox, FaClock, FaCheckCircle, FaTruck, FaTimesCircle, FaBan, FaUndo } 
 import axiosInstance from '../api/axiosInstance';
 
 const Orders = () => {
-    const { userInfo } = useSelector((state) => state.auth);
     const { darkMode } = useSelector((state) => state.theme);
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);

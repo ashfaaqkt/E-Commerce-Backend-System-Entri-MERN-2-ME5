@@ -11,11 +11,24 @@ connectDB();
 
 const app = express();
 
+const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+
 // Middleware
-app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-    credentials: true
-}));
+app.use(
+    cors({
+        origin(origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(null, false);
+            }
+        },
+        credentials: true,
+    })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -34,6 +47,10 @@ app.use('/api/ai', require('./routes/aiRoutes'));
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5002;
+
+app.get('/api/health', (req, res) => {
+    res.status(200).json({ success: true, message: 'Basket API is running' });
+});
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

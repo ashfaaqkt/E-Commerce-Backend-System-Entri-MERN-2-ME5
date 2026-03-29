@@ -1,0 +1,16 @@
+# Optional Render Blueprint — you can also configure manually in the Render dashboard.
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: basket-ecommerce-api
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: ecommerce-backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      # Set these in the Render dashboard (Environment) — do not commit secrets:
+      # MONGO_URI, JWT_SECRET, GEMINI_API_KEY, FRONTEND_URL
